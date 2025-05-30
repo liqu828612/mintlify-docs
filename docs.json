@@ -125,5 +125,6 @@
       "github": "https://github.com/mintlify",
       "linkedin": "https://linkedin.com/company/mintlify"
     }
-  }
+  },
+  "openapi": ["openapi_spec.json"]
 }
