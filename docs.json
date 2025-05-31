@@ -91,9 +91,18 @@
                     {
             "group": "发卡",
             "pages": [
-          
-              {
+           {
                 "group": "用卡人",
+                "pages": [
+                  "api-reference/用卡人/添加用卡人",
+                  "api-reference/用卡人/用卡人查询",
+                  "api-reference/用卡人/用卡人更新",
+                  "api-reference/用卡人/用卡人明细",
+                  "api-reference/用卡人/用卡人删除"
+                ]
+              },
+              {
+                "group": "卡管理",
                 "pages": [
                   "api-reference/卡管理/冻结、解冻",
                   "api-reference/卡管理/获取敏感信息",
@@ -102,16 +111,7 @@
                   "api-reference/卡管理/卡信息查询"
                 ]
               },
-                 {
-                "group": "卡管理",
-                "pages": [
-                  "api-reference/用卡人/添加用卡人",
-                  "api-reference/用卡人/用卡人查询",
-                  "api-reference/用卡人/用卡人更新",
-                  "api-reference/用卡人/用卡人明细",
-                  "api-reference/用卡人/用卡人删除"
-                ]
-              },    {
+                    {
                 "group": "卡交易管理",
                 "pages": [
                   "api-reference/卡交易管理/卡交易明细"
