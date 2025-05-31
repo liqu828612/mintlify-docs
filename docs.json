@@ -9,7 +9,6 @@
   },
   "favicon": "/favicon.svg",
   "navigation": {
-    
     "tabs": [
       {
         "tab": "Guides",
@@ -38,18 +37,15 @@
       {
         "tab": "API Reference",
         "groups": [
-   
-    
           {
             "group": "API Documentation",
             "pages": [
               "api-reference/introduction"
             ]
           },
-           {
+          {
             "group": "收单",
             "pages": [
-          
               {
                 "group": "端到端支付",
                 "pages": [
@@ -60,38 +56,36 @@
                   "api-reference/收单/转账",
                   "api-reference/收单/退款",
                   "api-reference/收单/转账查询"
-
                 ]
               },
-                 {
+              {
                 "group": "其它交易类型",
                 "pages": [
                   "api-reference/其他交易类型/获取微信openid",
                   "api-reference/其他交易类型/预授权撤销",
                   "api-reference/其他交易类型/预授权完成"
                 ]
-              },    {
+              },
+              {
                 "group": "商户管理",
                 "pages": [
                   "api-reference/商户管理/文件上传",
                   "api-reference/商户管理/商户注册",
                   "api-reference/商户管理/查询商户注册状态"
-          
                 ]
               },
-               {
+              {
                 "group": "文件下载",
                 "pages": [
                   "api-reference/文件下载/文件下载"
                 ]
               }
-              
             ]
           },
-                    {
+          {
             "group": "发卡",
             "pages": [
-           {
+              {
                 "group": "用卡人",
                 "pages": [
                   "api-reference/用卡人/添加用卡人",
@@ -111,13 +105,13 @@
                   "api-reference/卡管理/卡信息查询"
                 ]
               },
-                    {
+              {
                 "group": "卡交易管理",
                 "pages": [
                   "api-reference/卡交易管理/卡交易明细"
                 ]
               },
-               {
+              {
                 "group": "收件人",
                 "pages": [
                   "api-reference/收件人/添加收件人",
@@ -125,40 +119,65 @@
                   "api-reference/收件人/更新收件人"
                 ]
               }
-              
             ]
           },
-            {
-      "group": "Payments",
-      "pages": [
-        "api-reference/payments/payments--create-intent",
-        "api-reference/payments/payments--get-intent",
-        "api-reference/payments/payments--update-intent",
-        "api-reference/payments/payments--session-token",
-        "api-reference/payments/payments--payment-methods-list",
-        "api-reference/payments/payments--confirm-intent",
-        "api-reference/payments/payments--get",
-        "api-reference/payments/payments--create-and-confirm-intent",
-        "api-reference/payments/payments--list"
-      ]
-    },
-    {
-      "group": "Payment Methods",
-      "pages": [
-        "api-reference/payment-methods/payment-method--create",
-        "api-reference/payment-methods/payment-method--create-intent",
-        "api-reference/payment-methods/payment-method--payment-methods-list",
-        "api-reference/payment-methods/payment-method--confirm-intent",
-        "api-reference/payment-methods/payment-method--update",
-        "api-reference/payment-methods/payment-method--retrieve",
-        "api-reference/payment-methods/payment-method--delete",
-        "api-reference/payment-methods/list-saved-payment-methods-for-a-customer"
-      ]
-    }
+           {
+            "group": "WEBHOOKS",
+            "pages": [
+              {
+                "group": "消费通知",
+                "pages": [
+                  "api-reference/消费通知/消费成功通知",
+                  "api-reference/消费通知/消费处理中通知",
+                  "api-reference/消费通知/消费失败通知"
+                ]
+              },
+              {
+                "group": "撤销通知",
+                "pages": [
+                  "api-reference/撤销通知/撤销成功通知",
+                  "api-reference/撤销通知/撤销失败通知"
+                ]
+              },
+              {
+                "group": "卡通知",
+                "pages": [
+                  "api-reference/卡通知/卡交易成功",
+                  "api-reference/卡通知/卡交易失败"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Payments",
+            "pages": [
+              "api-reference/payments/payments--create-intent",
+              "api-reference/payments/payments--get-intent",
+              "api-reference/payments/payments--update-intent",
+              "api-reference/payments/payments--session-token",
+              "api-reference/payments/payments--payment-methods-list",
+              "api-reference/payments/payments--confirm-intent",
+              "api-reference/payments/payments--get",
+              "api-reference/payments/payments--create-and-confirm-intent",
+              "api-reference/payments/payments--list"
+            ]
+          },
+          {
+            "group": "Payment Methods",
+            "pages": [
+              "api-reference/payment-methods/payment-method--create",
+              "api-reference/payment-methods/payment-method--create-intent",
+              "api-reference/payment-methods/payment-method--payment-methods-list",
+              "api-reference/payment-methods/payment-method--confirm-intent",
+              "api-reference/payment-methods/payment-method--update",
+              "api-reference/payment-methods/payment-method--retrieve",
+              "api-reference/payment-methods/payment-method--delete",
+              "api-reference/payment-methods/list-saved-payment-methods-for-a-customer"
+            ]
+          }
         ]
       }
     ],
-  
     "global": {
       "anchors": [
         {
@@ -179,7 +198,6 @@
       ]
     }
   },
-  
   "logo": {
     "light": "/logo/light.svg",
     "dark": "/logo/dark.svg"
@@ -204,5 +222,7 @@
       "linkedin": "https://linkedin.com/company/mintlify"
     }
   },
-  "openapi": ["openapi_spec.json"]
+  "openapi": [
+    "openapi_spec.json"
+  ]
 }
