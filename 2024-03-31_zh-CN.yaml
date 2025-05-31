@@ -1,0 +1,4838 @@
+openapi: 3.1.0
+info:
+  version: '2024-03-31'
+  title: PayHui开放平台接口文档
+  summary: ''
+  description: "# Introduction.\n\nWelcome to PayHui.\n\nThe PayHui API is designed to be flexible and give you control in how and when you convert currencies, make payments and manage your accounts.\n\nWe recommend you read through the API Documentation in full to familiarise yourself with the features and workflows associated with the product. Demo account access can also be provided to you, and the Client ID and API key can be generated within Account settings > API keys in the Web Application.\n\nFor any assistance through the integration, your PayHui Business Development Manager and your allocated PayHui Client Integration Manager will be able to help guide you.\n# Versioning\n\nPayHui uses versioning to improve our API contracts without affecting existing users.\n\nWhen we need to introduce a backwards-incompatible change, such as renaming or splitting a field, we will create a new date version which clients can migrate to when ready.\n### What is the latest version?\nThe latest version is `2024-03-31`.\n\n\n\n## 支付方式\n | <center>支付方式</center> | <center>支持国家</center> | <center>支付类型</center> | <center>Tokenization</center> | <center>MIT</center> | <center>必填参数(端到端支付必填)</center> | <center>交易币种</center> |\n| :----: | :----: | :----: | :----: | :----:| :----:| :----: |\n| VISA | 全球 | CREDIT_CARD | ☑️ | ☑️ | cardNo/firstName/lastName/cvv/expireYear/expireMonth | 全币种 |\n| MasterCard | 全球 | CREDIT_CARD | ☑️ | ☑️ | cardNo/firstName/lastName/cvv/expireYear/expireMonth | 全币种 |\n| JCB | 全球 | CREDIT_CARD | ☑️ | ☑️ | cardNo/firstName/lastName/cvv/expireYear/expireMonth | 全币种 |\n| DISCOVER | 全球 | CREDIT_CARD | ☑️ | ☑️ | cardNo/firstName/lastName/cvv/expireYear/expireMonth | 全币种 |\n| UNION_PAY | 全球 | CREDIT_CARD | ☑️ | ☑️ | cardNo/firstName/lastName/cvv/expireYear/expireMonth | 全币种 |\n| WEIXIN | 中国香港(HK) | QRCODE,MICROPAY,JSAPI,</br>MINIPROGRAM,APP,H5\t | - | - | - | CNY,HKD |\n| UNIONPAY | 中国香港(HK) | WEB,PAN_PRESENT,QRCODE,</br>H5,3DS | - | - | - | CNY,HKD |\n| ALIPAY_CN | 中国(CN) | H5,WEB,APP\t | - | - | - | CNY,USD,HKD|\n| ALIPAY_HK | 中国香港(HK) | H5,WEB,APP\t | - | - | - | HKD,USD|\n| ALIPAY_HK | 中国香港(HK) | H5,WEB,APP\t | - | - | - | HKD,USD|\n| GCASH | 菲律宾(PH)| H5,WEB,BILLS\t | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | PHP,USD |\n| BPI | 菲律宾(PH)| H5,WEB\t | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | PHP,USD |\n| MAYA | 菲律宾(PH)| H5,WEB\t | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | PHP |\n| BILLEASE | 菲律宾(PH)| H5,WEB\t | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | PHP,USD |\n| Dragonpay | 菲律宾(PH)| H5,WEB\t | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | PHP |\n| GrabPay_PH | 菲律宾(PH)| H5,WEB\t | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | PHP |\n| TNG | 马来西亚(MY)| H5,WEB\t | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | MYR,USD |\n| BOOST | 马来西亚(MY)| H5,WEB\t | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | MYR,USD |\n| GrabPay_MY | 马来西亚(MY)| H5,WEB\t | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | MYR |\n| DANA | 印度尼西亚(ID)| H5,WEB\t | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | IDR,USD |\n| KAKAOPAY | 韩国(KR)| H5,WEB\t | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | KRW,USD |\n| NAVERPAY | 韩国(KR)| H5,WEB\t | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | KRW,USD |\n| TOSSPAY | 韩国(KR)| H5,WEB\t | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | KRW,USD |\n| TRUEMONEY | 泰国(TH)| H5,WEB\t | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | THB,USD |\n| RABBIT_LINE_PAY | 泰国(TH)| H5,WEB\t | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | THB,USD |\n| BRAZIL_PIX | 巴西(BR)| H5,QRCODE | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | BRL |\n| Ewallet_PicPay | 巴西(BR)| H5,QRCODE | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | BRL |\n| Khipu | 智利(CL)| H5 | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | CLP |\n| GrabPay_SG | 新加坡(SG)| H5,WEB\t | - |- | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | SGD,USD |\n| GoPay | 印度尼西亚(ID)| H5,WEB\t| - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | IDR |\n| OVO | 印度尼西亚(ID)| H5,WEB\t| - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | IDR |\n| DOKU | 印度尼西亚(ID)| H5,WEB\t| - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | IDR |\n| Konbini | 日本(JP)| H5,WEB\t| - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | JPY |\n| PayEasy | 日本(JP)| H5,WEB\t| - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | JPY |"
+  termsOfService: ''
+  contact:
+    name: 技术支持
+    email: support@payhui.com
+    url: ''
+  license:
+    url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
+    name: Apache 2.0
+servers:
+  - url: 'https://gate-uat.payhui.com/gateway/'
+    description: Development server
+  - url: 'https://gate.payhui.com/gateway/'
+    description: Live server
+paths:
+  /v1/payments/open/api/pay:
+    post:
+      tags:
+        - 收单
+      summary: 消费
+      description: 发起消费交易，消费成功时会产生实际扣款
+      operationId: post-v1-payments-open-api-pay
+      parameters:
+        - name: signature
+          in: header
+          description: 签名
+          required: true
+          schema:
+            type: string
+            examples:
+              - FPFVT3o227JrFRbqu19boZCpVVTF9KznxyRawUmxpfXilHV/0yK46haPhAjNu1hPUMy7Vw/ILXhfzffNm4Fj0apWknlTY9OJxnSoQxS9BTFtc61tn5yV1q69x/kkBl82/qwg+XTJ4fOzy7Mar3VaC1E2PlDA6RkkKBUyNE6RYgsdB+Su7an4+4HVTNAnoe74WyvBgxTLMNg28igBTdqxaO3w/UBY6ObVp7vkqkQGdL1Y+HgmMYaAVwrM3+ALWGId0sJ+YqTY4WJ+0xCRGhaSnybiIjZsQEYyID68WNUfuavDLDsEhaMm/HfQvf5p0R1Ltovp3wwJnEbQcjY458iX5A==
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pay'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayResponse'
+              examples:
+                Example 1:
+                  value:
+                    isSuccess: true
+                    errCode: string
+                    errMessage: string
+                    status: string
+                    traceId: string
+                    data:
+                      orderId: string
+                      merchantNo: string
+                      merchantOrderId: string
+                      currency: string
+                      payMethodResponse:
+                        isRedirect: string
+                        redirectMethod: string
+                        termUrl: string
+                        redirectParam: {}
+                        codeUrl: string
+                      transAmt: string
+      security:
+        - signature: []
+      servers:
+        - url: 'https://gate-uat.payhui.com/gateway/'
+          description: Development server
+        - url: 'https://gate.payhui.com/gateway/'
+          description: Live server
+      x-internal: false
+  /v1/payments/open/api/preAuth:
+    post:
+      tags:
+        - 收单
+      summary: 预授权
+      operationId: post-v1-payments-open-api-preAuth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pay'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayResponse'
+      security:
+        - signature: []
+      servers:
+        - url: 'https://gate-uat.payhui.com/gateway/'
+          description: Development server
+        - url: 'https://gate.payhui.com/gateway/'
+          description: Live server
+  /v1/payments/open/api/query:
+    post:
+      tags:
+        - 收单
+      summary: 交易查询
+      operationId: post-v1-payments-open-api-query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueryRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResponse'
+      security:
+        - signature: []
+      servers:
+        - url: 'https://gate-uat.payhui.com/gateway/'
+          description: Development server
+        - url: 'https://gate.payhui.com/gateway/'
+          description: Live server
+  /v1/payments/open/api/voids:
+    post:
+      tags:
+        - 收单
+      summary: 撤销
+      operationId: post-v1-payments-open-api-voids
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoidsRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoidsResponse'
+      security:
+        - signature: []
+      servers:
+        - url: 'https://gate-uat.payhui.com/gateway/'
+          description: Development server
+        - url: 'https://gate.payhui.com/gateway/'
+          description: Live server
+  /v1/payments/open/api/refund:
+    post:
+      tags:
+        - 收单
+      summary: 退款
+      operationId: post-v1-payments-open-api-refund
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoidsRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoidsResponse'
+      security:
+        - signature: []
+      servers:
+        - url: 'https://gate-uat.payhui.com/gateway/'
+          description: Development server
+        - url: 'https://gate.payhui.com/gateway/'
+          description: Live server
+  /v1/payments/open/api/transfer:
+    post:
+      tags:
+        - 收单
+      summary: 转账
+      operationId: post-v1-payments-open-api-transfer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransferResponse'
+      security:
+        - signature: []
+      servers:
+        - url: 'https://gate-uat.payhui.com/gateway/'
+          description: Development server
+        - url: 'https://gate.payhui.com/gateway/'
+          description: Live server
+  /v1/payments/open/api/transfer/query:
+    post:
+      tags:
+        - 收单
+      summary: 转账查询
+      operationId: post-v1-payments-open-api-transfer-query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferQueryRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransferResponse'
+      security:
+        - signature: []
+      servers:
+        - url: 'https://gate-uat.payhui.com/gateway/'
+          description: Development server
+        - url: 'https://gate.payhui.com/gateway/'
+          description: Live server
+  /v1/merchant/open/api/file/upload:
+    post:
+      tags:
+        - 商户管理
+      summary: 文件上传
+      operationId: post-v1-merchant-open-api-file-upload
+      parameters:
+        - name: charset
+          in: query
+          description: 字符编码
+          required: true
+          schema:
+            type: string
+        - name: merchantId
+          in: query
+          description: 商户号
+          required: true
+          schema:
+            type: string
+        - name: requestTime
+          in: query
+          description: 请求时间
+          required: true
+          schema:
+            type: string
+        - name: signType
+          in: query
+          description: 签名类型
+          required: true
+          schema:
+            type: string
+        - name: transType
+          in: query
+          description: 交易类型
+          required: true
+          schema:
+            type: string
+        - name: version
+          in: query
+          description: 版本
+          required: true
+          schema:
+            type: string
+        - name: fileMd5
+          in: query
+          schema:
+            type: string
+        - name: fileType
+          in: query
+          required: true
+          deprecated: false
+          schema:
+            type: string
+            enum:
+              - SUBMERCHANT_REGISTRATION_00
+              - SUBMERCHANT_REGISTRATION_01
+              - SUBMERCHANT_REGISTRATION_02
+              - SUBMERCHANT_REGISTRATION_03
+        - name: file
+          in: query
+          required: true
+          schema: {}
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                fileMd5:
+                  type: string
+                fileType:
+                  type: string
+                file:
+                  type: string
+                  contentMediaType: application/octet-stream
+      responses: {}
+      security:
+        - signature: []
+      servers:
+        - url: 'https://gate-uat.payhui.com/gateway/'
+          description: Development server
+        - url: 'https://gate.payhui.com/gateway/'
+          description: Live server
+  /v1/merchant/open/api/registration:
+    post:
+      tags:
+        - 商户管理
+      summary: 商户注册
+      operationId: post-v1-merchant-open-api-registration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistrationRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistrationResponse'
+      security:
+        - signature: []
+      servers:
+        - url: 'https://gate-uat.payhui.com/gateway/'
+          description: Development server
+        - url: 'https://gate.payhui.com/gateway/'
+          description: Live server
+  /v1/merchant/open/api/inquiryRegistrationStatus:
+    post:
+      tags:
+        - 商户管理
+      summary: 查询商户注册状态
+      operationId: post-v1-merchant-open-api-inquiryRegistrationStatus
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistrationQueryRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistrationQueryResponse'
+      security:
+        - signature: []
+      servers:
+        - url: 'https://gate-uat.payhui.com/gateway/'
+          description: Development server
+        - url: 'https://gate.payhui.com/gateway/'
+          description: Live server
+  /v1/payments/open/api/download:
+    post:
+      tags:
+        - 文件下载
+      summary: 文件下载
+      operationId: post-v1-payments-open-api-download
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportDownloadRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportDownloadResponse'
+      security:
+        - signature: []
+      servers:
+        - url: 'https://gate-uat.payhui.com/gateway/'
+          description: Development server
+        - url: 'https://gate.payhui.com/gateway/'
+          description: Live server
+  /v1/weChatPay/jsapi/authorize:
+    get:
+      tags:
+        - 其他交易类型
+      summary: 获取微信openid
+      description: |
+        1. 商户使用JSAPI支付前，需要先调用此接口获取微信openid
+        2. 通过网页授权接口获取openid
+        3. JSAPI支付时需要传入openid
+        ## 注意
+        - 该方法需要使用微信内部请求。
+        - 需要传入接收openid的地址,该地址必须是GET方式接收。
+      operationId: get-v1-weChatPay-jsapi-authorize
+      parameters:
+        - name: redirectUri
+          in: query
+          description: "授权后重定向的回调链接地址， 请使用 urlEncode 对链接进行处理\t"
+          required: true
+          schema:
+            type: string
+            format: uri
+            examples:
+              - 'https://www.qq.com'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/x-www-form-urlencoded:
+              schema:
+                type: object
+                properties:
+                  openid:
+                    type: string
+                    description: 微信的openid值
+                    examples:
+                      - oUpF8uMuAJO_M2pxb1Q9zNjWeS6o
+                  errCode:
+                    type: string
+                    description: 响应编码
+                    examples:
+                      - '00000000'
+                  errMessage:
+                    type: string
+                    description: 响应说明
+                    examples:
+                      - 交易成功
+                required:
+                  - openid
+                  - errCode
+                  - errMessage
+      security: []
+      servers:
+        - url: 'https://gate-uat.payhui.com/gateway/'
+          description: Development server
+        - url: 'https://gate.payhui.com/gateway/'
+          description: Live server
+  /v1/payments/open/api/preAuthComplete:
+    post:
+      tags:
+        - 其他交易类型
+      summary: 预授权完成
+      operationId: post-v1-payments-open-api-preAuthComplete
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PreAuthCompleteRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PreAuthCompleteResponse'
+      security:
+        - signature: []
+      servers:
+        - url: 'https://gate-uat.payhui.com/gateway/'
+          description: Development server
+        - url: 'https://gate.payhui.com/gateway/'
+          description: Live server
+  /v1/payments/open/api/preAuthVoid:
+    post:
+      tags:
+        - 其他交易类型
+      summary: 预授权撤销
+      operationId: post-v1-payments-open-api-preAuthVoid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PreAuthVoidRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PreAuthVoidResponse'
+      security:
+        - signature: []
+      servers:
+        - url: 'https://gate-uat.payhui.com/gateway/'
+          description: Development server
+        - url: 'https://gate.payhui.com/gateway/'
+          description: Live server
+  /v1/issuing/cardholders/create:
+    post:
+      tags:
+        - 用卡人
+      summary: 添加用卡人
+      description: 用于添加用卡人，开卡时使用用卡人开卡。
+      operationId: post-v1-issuing-cardholders-create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VccAddCardholderReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VccAddCardholderResp'
+      security:
+        - signature: []
+      servers:
+        - url: 'https://gate-uat.payhui.com/gateway/'
+          description: Development server
+        - url: 'https://gate.payhui.com/gateway/'
+          description: Live server
+  /v1/issuing/cardholders/gets:
+    post:
+      tags:
+        - 用卡人
+      summary: 用卡人查询
+      operationId: post-v1-issuing-cardholders-gets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VccCardholdersGetsReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VccCardholdersGetsRes'
+      security:
+        - signature: []
+      servers:
+        - url: 'https://gate-uat.payhui.com/gateway/'
+          description: Development server
+        - url: 'https://gate.payhui.com/gateway/'
+          description: Live server
+  /v1/issuing/cardholders/details:
+    post:
+      tags:
+        - 用卡人
+      summary: 用卡人明细
+      operationId: post-v1-issuing-cardholders-details
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VccCardholdersDetailsReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VccCardholdersDetailsRes'
+      security:
+        - signature: []
+      servers:
+        - url: 'https://gate-uat.payhui.com/gateway/'
+          description: Development server
+        - url: 'https://gate.payhui.com/gateway/'
+          description: Live server
+  /v1/issuing/cardholders/update:
+    post:
+      tags:
+        - 用卡人
+      summary: 用卡人更新
+      operationId: post-v1-issuing-cardholders-update
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VccCardholdersUpdateReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+      security:
+        - signature: []
+      servers:
+        - url: 'https://gate-uat.payhui.com/gateway/'
+          description: Development server
+        - url: 'https://gate.payhui.com/gateway/'
+          description: Live server
+  /v1/issuing/cardholders/delete:
+    post:
+      tags:
+        - 用卡人
+      summary: 用卡人删除
+      operationId: post-v1-issuing-cardholders-delete
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VccCardholdersDeleteReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+      security:
+        - signature: []
+      servers:
+        - url: 'https://gate-uat.payhui.com/gateway/'
+          description: Development server
+        - url: 'https://gate.payhui.com/gateway/'
+          description: Live server
+  /v1/issuing/cards/get/bins:
+    post:
+      tags:
+        - 卡管理
+      summary: 卡 BIN 查询
+      operationId: post-v1-issuing-cards-get-bins
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VccCardsGetCardBinsReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VccCardsGetCardBinsRes'
+      security:
+        - signature: []
+      servers:
+        - url: 'https://gate-uat.payhui.com/gateway/'
+          description: Development server
+        - url: 'https://gate.payhui.com/gateway/'
+          description: Live server
+  /v1/issuing/cards/create:
+    post:
+      tags:
+        - 卡管理
+      summary: 开卡
+      operationId: post-v1-issuing-cards-create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VccCardsCreateReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VccCardsCreateRes'
+      security:
+        - signature: []
+      servers:
+        - url: 'https://gate-uat.payhui.com/gateway/'
+          description: Development server
+        - url: 'https://gate.payhui.com/gateway/'
+          description: Live server
+  /v1/issuing/cards/get/sensitive:
+    post:
+      tags:
+        - 卡管理
+      summary: 获取敏感信息
+      operationId: post-v1-issuing-cards-get-sensitive
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VccCardsGetSensitiveReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VccCardsGetSensitiveRes'
+      security:
+        - signature: []
+      servers:
+        - url: 'https://gate-uat.payhui.com/gateway/'
+          description: Development server
+        - url: 'https://gate.payhui.com/gateway/'
+          description: Live server
+  /v1/issuing/cards/postal/create:
+    post:
+      tags:
+        - 收件人
+      summary: 添加收件人
+      operationId: post-v1-issuing-cards-postal-create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CardsPostalCreateReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardsPostalCreateRes'
+      security:
+        - signature: []
+      servers:
+        - url: 'https://gate-uat.payhui.com/gateway/'
+          description: Development server
+        - url: 'https://gate.payhui.com/gateway/'
+          description: Live server
+  /v1/issuing/cards/postal/update:
+    post:
+      tags:
+        - 收件人
+      summary: 更新收件人
+      operationId: post-v1-issuing-cards-postal-update
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CardsPostalUpdateReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+      security:
+        - signature: []
+      servers:
+        - url: 'https://gate-uat.payhui.com/gateway/'
+          description: Development server
+        - url: 'https://gate.payhui.com/gateway/'
+          description: Live server
+  /v1/issuing/cards/create/query:
+    post:
+      tags:
+        - 卡管理
+      summary: 开卡请求查询
+      operationId: post-v1-issuing-cards-create-query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CardsCreateQueryReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VccCardsCreateRes'
+      security:
+        - signature: []
+      servers:
+        - url: 'https://gate-uat.payhui.com/gateway/'
+          description: Development server
+        - url: 'https://gate.payhui.com/gateway/'
+          description: Live server
+  /v1/issuing/cards/freeze:
+    post:
+      tags:
+        - 卡管理
+      summary: 冻结、解冻
+      operationId: post-v1-issuing-cards-freeze
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CardsFreezeReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+      security:
+        - signature: []
+      servers:
+        - url: 'https://gate-uat.payhui.com/gateway/'
+          description: Development server
+        - url: 'https://gate.payhui.com/gateway/'
+          description: Live server
+  /v1/issuing/cards/cancel:
+    post:
+      tags:
+        - 卡管理
+      summary: 销卡
+      operationId: post-v1-issuing-cards-cancel
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CardsCancelReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+      security:
+        - signature: []
+      servers:
+        - url: 'https://gate-uat.payhui.com/gateway/'
+          description: Development server
+        - url: 'https://gate.payhui.com/gateway/'
+          description: Live server
+  /v1/issuing/cards/transactions:
+    post:
+      tags:
+        - 卡交易管理
+      summary: 卡交易明细
+      operationId: post-v1-issuing-cards-transactions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CardsTransactionsReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardsTransactionsRes'
+      security:
+        - signature: []
+      servers:
+        - url: 'https://gate-uat.payhui.com/gateway/'
+          description: Development server
+        - url: 'https://gate.payhui.com/gateway/'
+          description: Live server
+  /v1/issuing/cards/postal/gets:
+    post:
+      tags:
+        - 收件人
+      summary: 收件人查询
+      description: 用于查询收件人列表。
+      operationId: post-v1-issuing-cards-postal-gets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CardsPostalGetsReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardsPostalGetsRes'
+      security:
+        - signature: []
+      servers:
+        - url: 'https://gate-uat.payhui.com/gateway/'
+          description: Development server
+        - url: 'https://gate.payhui.com/gateway/'
+          description: Live server
+  /v1/issuing/cards/details:
+    post:
+      tags:
+        - 卡管理
+      summary: 卡信息查询
+      operationId: post-v1-issuing-cards-details
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CardsDetailsReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardsDetailsRes'
+      security:
+        - signature: []
+      servers:
+        - url: 'https://gate-uat.payhui.com/gateway/'
+          description: Development server
+        - url: 'https://gate.payhui.com/gateway/'
+          description: Live server
+  /v1/issuing/cards/recharge:
+    post:
+      tags:
+        - 卡管理
+      summary: 卡充值
+      operationId: post-v1-issuing-cards-recharge
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CardRechargeReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardRechargeResDto'
+      security:
+        - signature: []
+      servers:
+        - url: 'https://gate-uat.payhui.com/gateway/'
+          description: Development server
+        - url: 'https://gate.payhui.com/gateway/'
+          description: Live server
+webhooks:
+  payment_intent.succeeded:
+    post:
+      tags:
+        - 消费通知
+      summary: 消费成功通知
+      description: '当消费成功后，通过开发者webhook配置，开发平台会发送通知给商户，当接受不成功或者发送失败时, 会重发8次, 时间间隔为5s,20s,1m,5m,30m,2h,24h'
+      parameters:
+        - name: X-eventName
+          in: header
+          description: 通知种类
+          required: true
+          schema:
+            const: GlobalAccount
+            examples:
+              - GlobalAccount
+          examples:
+            default:
+              value: GlobalAccount
+        - name: X-eventType
+          in: header
+          description: 通知子类
+          required: true
+          schema:
+            const: settle
+            examples:
+              - settle
+          examples:
+            default:
+              value: settle
+        - name: signature
+          in: header
+          description: '使用平台私钥对requestBody做了加签, 请使用平台公钥对requestBody做签名验证'
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhooksRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhooksResponse'
+      security:
+        - signature: []
+  payment_intent.failed:
+    post:
+      tags:
+        - 消费通知
+      summary: 消费失败通知
+      description: '当消费成功后，通过开发者webhook配置，开发平台会发送通知给商户，当接受不成功或者发送失败时, 会重发8次, 时间间隔为5s,20s,1m,5m,30m,2h,24h'
+
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhooksRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhooksResponse'
+      security:
+        - signature: []
+  payment_intent.pending:
+    post:
+      tags:
+        - 消费通知
+      summary: 消费处理中通知
+      description: '当消费成功后，通过开发者webhook配置，开发平台会发送通知给商户，当接受不成功或者发送失败时, 会重发8次, 时间间隔为5s,20s,1m,5m,30m,2h,24h'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhooksRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhooksResponse'
+      security:
+        - signature: []
+  voids.succeeded:
+    post:
+      tags:
+        - 撤销通知
+      summary: 撤销成功通知
+      description: '当消费成功后，通过开发者webhook配置，开发平台会发送通知给商户，当接受不成功或者发送失败时, 会重发8次, 时间间隔为5s,20s,1m,5m,30m,2h,24h'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhooksRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhooksResponse'
+      security:
+        - signature: []
+  voids.failed:
+    post:
+      tags:
+        - 撤销通知
+      summary: 撤销失败通知
+      description: '当消费成功后，通过开发者webhook配置，开发平台会发送通知给商户，当接受不成功或者发送失败时, 会重发8次, 时间间隔为5s,20s,1m,5m,30m,2h,24h'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhooksRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhooksResponse'
+      security:
+        - signature: []
+  issuing.transaction.succeeded:
+    post:
+      tags:
+        - 卡通知
+      summary: 卡交易成功
+      description: '当消费成功后，通过开发者webhook配置，开发平台会发送通知给商户，当接受不成功或者发送失败时, 会重发8次, 时间间隔为5s,20s,1m,5m,30m,2h,24h'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssuingTransactionSucceededWebhooks'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhooksResponse'
+      security:
+        - signature: []
+  issuing.transaction.failed:
+    post:
+      tags:
+        - 卡通知
+      summary: 卡交易失败
+      description: '当消费失败后，通过开发者webhook配置，开发平台会发送通知给商户，当接受不成功或者发送失败时, 会重发8次, 时间间隔为5s,20s,1m,5m,30m,2h,24h'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssuingTransactionFailedWebhooks'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhooksResponse'
+      security:
+        - signature: []
+tags:
+  - name: 收单
+  - name: 其他交易类型
+  - name: 商户管理
+  - name: 文件下载
+  - name: 用卡人
+  - name: 卡管理
+  - name: 卡交易管理
+  - name: 收件人
+components:
+  securitySchemes:
+    signature:
+      type: apiKey
+      description: |-
+        ## 加签
+        加签是开放平台和商户对于交互消息完整性的校验。加签行为主要发生两个部分：
+        1. 商户服务器端针对向PayHui开放平台发送的请求报文进行加签；
+        2. PayHui开放平台针对通知商户的异步消息进行加签。
+        PayHui平台要求使用 RSA 私钥进行加签， 使用 RSA 公钥进行验签。 因此，在以上两部分描述的交互中， 存在商户公私钥、PayHui 公私钥，开发者需要使用商户私钥，对第一部分报文进行加签，使用 PayHui 公钥对第二部分消息进行验签。
+        ### 加签规则如下: 
+        1. 使用 商户私钥对待 `request.body` 进行签名（SHA256WithRSA 计算原始数据的SHA-256哈希值。 使用私钥对哈希值进行签名，即使用私钥对哈希值进行RSA加密。此时得到的加密结果就是数字签名。）；
+        ```java
+        Signature signature = Signature.getInstance("SHA256withRSA");
+        signature.initSign(privateKey);
+        // 计算 SHA256withRSA 签名时，需要以 utf-8 的编码转换 byte 流，否则可能导致含中文参数的签名计算不正确
+        signature.update(request.body);
+        byte[] signedHash = signature.sign();
+        ```
+        2. 将加签内容进行 Base64 编码；
+        ```java
+        String signature = Base64.getEncoder().encodeToString(signedHash);
+
+        ```
+        3. 将编码后的内容放在请求头部 signature 参数中。
+        注意，加签是对 request.body 进行签名，当查询等 request.body 为空时，则无需加签。
+      name: signature
+      in: header
+  responses:
+    PayResponse:
+      description: ''
+    WebhooksResponse:
+      description: ''
+  schemas:
+    Pay:
+      title: Pay
+      examples:
+        - charset: UTF-8
+          version: 2.0.0
+          transType: PAY
+          accessType: s2s
+          signType: RSA
+          memberId: '2023010558663764'
+          merchantId: '2023010558663764'
+          threeDsType: '2.0'
+          deviceChannel: string
+          transChannel: WEIXIN
+          transTimeout: string
+          carrierId: carrierId
+          currency: USD
+          transAmt: '20.01'
+          goodsName: Iphone15
+          dcc: DCC
+          notifyUrl: 'http://example.com'
+          redirectUrl: 'http://www.gogole.com'
+          merchantOrderId: '20230424141154'
+          customerIp: 18.277.26.154
+          payMode: QRCODE
+          payMethodInfo:
+            cardNo: 444433******1111
+            expirationMonth: '01'
+            expirationYear: '2026'
+            cvv: '123'
+            firstName: Bren
+            lastName: Qiu
+            phone: '18817536697'
+          merchantOrderTime: '2019-08-24T14:15:22Z'
+          osType: IOS
+          merchantRegion: US
+          authCode: '133788758877188822'
+          appId: wxd678efh567hg6787
+          openId: oUpF8uMuAJO_M2pxb1Q9zNjWeS6o
+          reqReserved: reqReserved
+          reserved: reserved
+          buyerId: oUpF8uMuAJO_M2pxb1Q9zNjWeS6o
+          address:
+            zipCode: '344104'
+            region: US
+            city: ShangHai
+            state: ShangHai
+            phone: '18817536697'
+            email: string
+            address1: Lou Lan street
+            address2: Lou Lan street 2
+          customer:
+            address:
+              zipCode: '344104'
+              region: US
+              city: ShangHai
+              state: ShangHai
+              phone: '18817536697'
+              email: string
+              address1: Lou Lan street
+              address2: Lou Lan street 2
+            certificate:
+              number: string
+              type: string
+          subMerchantId: string
+          userAgent: string
+          goods:
+            - referenceGoodsId: M1006
+              goodsName: 单品惠-6
+              goodsCategory: '1001'
+              goodsQuantity: '100'
+              goodsUnitAmount: '100.01'
+          store:
+            storeTerminalId: '0001'
+          browserInfo:
+            acceptHeader: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36'
+            javaEnabled: 'true'
+            language: en-US
+            colorDepth: '160'
+            screenHeight: '1024'
+            screenWidth: '648'
+            browserTz: string
+            browserIp: 8.8.8.8
+            userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36'
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          properties:
+            threeDsType:
+              type: string
+              description: 使用3d交易必传(示例值 1.0 2.0)
+              examples:
+                - '2.0'
+            deviceChannel:
+              type: string
+              description: 设备渠道
+            transChannel:
+              type: string
+              enum:
+                - WEIXIN
+                - UNIONPAY
+                - ALIPAY_CN
+                - ALIPAY_HK
+                - GCASH
+                - BPI
+                - TNG
+                - BOOST
+                - DANA
+                - KAKAOPAY
+                - TRUEMONEY
+                - BRAZIL_PIX
+                - Ewallet_PicPay
+                - Khipu
+                - RABBIT_LINE_PAY
+                - ALIPAY_INSTORE
+                - NAVERPAY
+                - TOSSPAY
+                - GrabPay_SG
+                - MAYA
+                - BILLEASE
+                - GrabPay_MY
+                - GoPay
+                - OVO
+                - DOKU
+                - Dragonpay
+                - Konbini
+                - PayEasy
+                - GrabPay_PH
+              description: 支付渠道
+            transTimeout:
+              type: string
+              description: '订单有效时长(整数格式 单位:分钟)'
+            carrierId:
+              type: string
+              description: 发生交易的网站域名或者APP名称
+              examples:
+                - carrierId
+            currency:
+              type: string
+              description: '订单币种[ISO4217](https://www.iso.org/standard/46121.html)币种的字母码 eg. USD, CNY, EUR'
+              examples:
+                - USD
+            transAmt:
+              type: string
+              description: 订单金额 请按照4217币种的最小单位传递 eg.(CNY) 110.86  (JPY) 1110【创建token快捷支付时，金额为0代表只创建令牌，非0代表创建令牌并支付】
+              examples:
+                - '20.01'
+            goodsName:
+              type: string
+              description: "商品名称,多个商品 用\";\"隔开\t"
+              examples:
+                - Iphone15
+            dcc:
+              type: string
+              description: 交易是否走DCC 传送：dcc
+              examples:
+                - DCC
+            notifyUrl:
+              type: string
+              description: 异步通知地址
+              format: uri
+              minLength: 10
+              maxLength: 200
+            redirectUrl:
+              type: string
+              description: 前台回调地址
+              examples:
+                - 'http://www.gogole.com'
+            merchantOrderId:
+              type: string
+              description: 商户订单号
+              examples:
+                - '20230424141154'
+            customerIp:
+              type: string
+              description: 用户ip
+              examples:
+                - 18.277.26.154
+            payMode:
+              type: string
+              enum:
+                - QRCODE
+                - MICROPAY
+                - JSAPI
+                - MINIPROGRAM
+                - APP
+                - H5
+                - 3D
+                - FIXEDCODE
+              description: |
+                交易类型
+                更多描述参考 [支付方式](api#/#支付方式)
+              default: QRCODE
+              examples:
+                - QRCODE
+            payMethodInfo:
+              $ref: '#/components/schemas/PayMethodInfo'
+            merchantOrderTime:
+              type: string
+              description: |-
+                商户订单的时间，遵循[rfc3339](https://datatracker.ietf.org/doc/html/rfc3339)标准格式，格式为yyyy-MM-DDTHH:mm:ssSSS+TIMEZONE，yyyy-MM-DD表示年月日，T出现在字符串中，表示time元素的开头，HH:mm:ss表示时分秒，TIMEZONE表示时区（+08:00表示东八区时间，领先UTC 8小时，即北京时间）。例如：2015-05-20T13:29:35.262+08:00表示，北京时间2015年5月20日13点29分35秒。
+                <mark style="color:red;">需要在当前时间两分钟内</mark>
+              format: date-time
+              examples:
+                - '2024-07-18T17:03:02.262+08:00'
+            osType:
+              type: string
+              description: 手机操作系统类型(支付类型为APP时必传)
+              examples:
+                - IOS
+            merchantRegion:
+              type: string
+              description: 商户所在地区
+              examples:
+                - US
+            authCode:
+              type: string
+              description: "授权码(支付渠道为WEIXIN且支付类型为MICROPAY时需传值)\t"
+              examples:
+                - '133788758877188822'
+            appId:
+              type: string
+              description: 公众账号ID
+              examples:
+                - wxd678efh567hg6787
+            openId:
+              type: string
+              description: 应用内用户ID
+              examples:
+                - oUpF8uMuAJO_M2pxb1Q9zNjWeS6o
+            reqReserved:
+              type: string
+              description: 商户扩展字段
+              examples:
+                - reqReserved
+            reserved:
+              type: string
+              description: 保留字段
+              examples:
+                - reserved
+            buyerId:
+              type: string
+              description: 商户用户ID(支付渠道为BRAZIL_PIX必传)
+              examples:
+                - oUpF8uMuAJO_M2pxb1Q9zNjWeS6o
+            address:
+              $ref: '#/components/schemas/Address'
+            customer:
+              $ref: '#/components/schemas/Customer'
+            subMerchantId:
+              type: string
+            userAgent:
+              type: string
+            goods:
+              type: array
+              items:
+                $ref: '#/components/schemas/Goods'
+            store:
+              $ref: '#/components/schemas/Store'
+            browserInfo:
+              $ref: '#/components/schemas/BrowserInfo'
+          required:
+            - transChannel
+            - transTimeout
+            - carrierId
+            - currency
+            - transAmt
+            - merchantOrderId
+            - payMode
+            - merchantOrderTime
+            - merchantRegion
+      x-User: null
+    BaseRequest:
+      type: object
+      properties:
+        charset:
+          type: string
+          description: 交互数据的编码【utf-8】
+          default: UTF-8
+          examples:
+            - UTF-8
+        version:
+          type: string
+          description: "接口版本，当前版本为【2.0.0】,目前只能传2.0.0，不能不传\t"
+          examples:
+            - 2.0.0
+        transType:
+          type: string
+          enum:
+            - PAY
+            - CREDIT_CARD
+            - 3D_PREAUTH_VOIDS
+            - 3D_PREAUTH_COMPLETION
+            - REFUND
+            - VOIDS
+            - QUERY
+            - TRANSFER
+            - DOWNLOAD
+            - REGISTRATION
+            - FILEUPLOAD
+            - INQUIRYREGISTRATIONSTATUS
+            - AUTHORIZE
+            - VCC
+          description: |-
+            > **交易类型** 
+            > * 支付类交易使用 PAY
+            > * VCC 卡交易使用 VCC
+          default: PAY
+        accessType:
+          type: string
+          description: "接口访问类型\t"
+          default: s2s
+          examples:
+            - s2s
+        signType:
+          type: string
+          description: 报文签名类型
+          examples:
+            - RSA
+        memberId:
+          type: string
+          description: 机构号
+          examples:
+            - '2023010558663764'
+        merchantId:
+          type: string
+          description: 商户号
+          examples:
+            - '2023010558663764'
+        requestTime:
+          type: string
+          description: '请求时间，符合rfc3339规范，格式：yyyy-MM-dd''T''HH:mm:ss.SSSXXX 时间需要在当前时间两分钟内'
+          examples:
+            - '2024-05-24T14:29:32.682+08:00'
+      required:
+        - charset
+        - version
+        - transType
+        - accessType
+        - signType
+        - memberId
+        - merchantId
+        - requestTime
+      x-examples:
+        Example 1:
+          charset: UTF-8
+          version: 2.0.0
+          transType: string
+          accessType: PAY
+          signType: RSA
+          memberId: stringstri
+          merchantId: stringstri
+    PayMethodInfo:
+      type: object
+      properties:
+        cardNo:
+          type: string
+          description: "交易卡号\t"
+          examples:
+            - 444433******1111
+        expirationMonth:
+          enum:
+            - '01'
+            - '02'
+            - '03'
+            - '04'
+            - '05'
+            - '06'
+            - '07'
+            - '08'
+            - '09'
+            - 10
+            - 11
+            - 12
+          description: "卡片有效期月\t"
+          default: '01'
+          examples:
+            - '01'
+        expirationYear:
+          type: string
+          description: "卡片有效期年\t"
+          examples:
+            - '2026'
+        cvv:
+          type: string
+          description: "cvv\t"
+          examples:
+            - '123'
+        firstName:
+          type: string
+          description: "持卡人名,字母类型\t"
+          examples:
+            - Bren
+        lastName:
+          type: string
+          description: "持卡人姓,字母类型\t"
+          examples:
+            - Qiu
+        phone:
+          type: string
+          description: 手机号
+          examples:
+            - '18817536697'
+      x-examples:
+        Example 1:
+          cardNo: string
+          expirationMonth: string
+          expirationYear: string
+          cvv: string
+          firstName: string
+          lastName: string
+          phone: string
+    Address:
+      type: object
+      properties:
+        zipCode:
+          type: string
+          description: 邮编
+          examples:
+            - '344104'
+        region:
+          type: string
+          description: "地区码/国家 ISO 3166-1规范两位字母的国家代码\t"
+          examples:
+            - US
+        city:
+          type: string
+          description: 城市
+          examples:
+            - ShangHai
+        state:
+          type: string
+          description: 省份
+          examples:
+            - ShangHai
+        phone:
+          type: string
+          description: 手机
+          examples:
+            - '18817536697'
+        email:
+          type: string
+          description: "邮箱\t"
+        address1:
+          type: string
+          description: "地址\t"
+          examples:
+            - Lou Lan street
+        address2:
+          type: string
+          description: "地址\t"
+          examples:
+            - Lou Lan street 2
+      x-examples:
+        Example 1:
+          zipCode: string
+          region: string
+          city: string
+          state: string
+          phone: string
+          email: string
+          address1: string
+          address2: string
+    Customer:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/Address'
+        certificate:
+          $ref: '#/components/schemas/Certificate'
+      x-examples:
+        Example 1:
+          address: string
+          certificate: string
+    Certificate:
+      type: object
+      title: Certificate
+      properties:
+        number:
+          type: string
+        type:
+          type: string
+    Goods:
+      type: object
+      properties:
+        referenceGoodsId:
+          type: string
+          description: "商品编号\t"
+          examples:
+            - M1006
+        goodsName:
+          type: string
+          description: "商品名称\t"
+          examples:
+            - 单品惠-6
+        goodsCategory:
+          type: string
+          description: "商品分类\t"
+          examples:
+            - '1001'
+        goodsQuantity:
+          type: string
+          description: "商品数量\t"
+          examples:
+            - '100'
+        goodsUnitAmount:
+          type: string
+          description: "金额信息\t"
+          examples:
+            - '100.01'
+      x-examples:
+        Example 1:
+          referenceGoodsId: string
+          goodsName: string
+          goodsCategory: string
+          goodsQuantity: string
+          goodsUnitAmount: string
+    Store:
+      type: object
+      title: Store
+      properties:
+        storeTerminalId:
+          type: string
+          description: "店铺处理支付设备ID\t"
+          examples:
+            - '0001'
+    BrowserInfo:
+      type: object
+      properties:
+        acceptHeader:
+          type: string
+          description: "浏览器请求头\t"
+          examples:
+            - 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36'
+        javaEnabled:
+          type: string
+          description: "浏览器Java是否启用.javaEnabled属性\t"
+          examples:
+            - 'true'
+        language:
+          type: string
+          description: "浏览器语言navigator\t"
+          examples:
+            - en-US
+        colorDepth:
+          type: string
+          description: "浏览器像素screen.colorDepth属性\t"
+          examples:
+            - '160'
+        screenHeight:
+          type: string
+          description: "浏览器屏幕高度screen.height属性\t"
+          examples:
+            - '1024'
+        screenWidth:
+          type: string
+          description: "浏览器屏幕宽度screen.width属性\t"
+          examples:
+            - '648'
+        browserTz:
+          type: string
+          description: "时差getTimezoneOffset()\t"
+        browserIp:
+          type: string
+          description: "浏览器Ip\t"
+          examples:
+            - 8.8.8.8
+        userAgent:
+          type: string
+          description: "浏览器请求头User-Agent属性\t"
+          examples:
+            - 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36'
+      x-examples:
+        Example 1:
+          acceptHeader: string
+          javaEnabled: string
+          language: string
+          colorDepth: string
+          screenHeight: string
+          screenWidth: string
+          browserTz: string
+          browserIp: string
+          userAgent: string
+    PayResponse:
+      examples:
+        - isSuccess: true
+          errCode: '00000003'
+          errMessage: 处理中
+          status: PENDING
+          traceId: 33fae7b7aed1233f
+          data:
+            orderId: TR1658354573473091584
+            merchantNo: '2023010558663764'
+            merchantOrderId: string
+            currency: USD
+            transAmt: '100.01'
+            payMethodResponse:
+              isRedirect: 'yes'
+              redirectMethod: get
+              termUrl: string
+              redirectParam: {}
+              codeUrl: 'weixin://wxpay/bizpayurl?pr=waUjCuPzz'
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                orderId:
+                  type: string
+                  description: 交易订单号
+                  examples:
+                    - TR1658354573473091584
+                merchantNo:
+                  type: string
+                  description: 商户号
+                  examples:
+                    - '2023010558663764'
+                merchantOrderId:
+                  type: string
+                  description: 商户订单号
+                currency:
+                  type: string
+                  description: '订单币种[ISO4217](https://www.iso.org/standard/46121.html)币种的字母码 eg. USD, CNY, EUR'
+                  examples:
+                    - USD
+                transAmt:
+                  type: string
+                  description: 交易金额
+                  examples:
+                    - '100.01'
+                payMethodResponse:
+                  type: object
+                  description: 支付扩展信息
+                  properties:
+                    isRedirect:
+                      type: string
+                      description: "该笔交易是否需要重定向 yes：需要 no：不需要\t"
+                      examples:
+                        - 'yes'
+                    redirectMethod:
+                      type: string
+                      description: "重定向方式，isRedirect=yes时返回。包含GET和POST\t"
+                      examples:
+                        - get
+                    termUrl:
+                      type: string
+                      description: "继续支付跳转地址，isRedirect=y时返回\t"
+                    redirectParam:
+                      type: object
+                      description: 重定向参数，商户需带着redirectParam重定向termUrl
+                    codeUrl:
+                      type: string
+                      description: 二维码链接
+                      examples:
+                        - 'weixin://wxpay/bizpayurl?pr=waUjCuPzz'
+                  required:
+                    - isRedirect
+              required:
+                - orderId
+                - merchantNo
+                - merchantOrderId
+                - currency
+                - transAmt
+      x-examples:
+        Example 1:
+          isSuccess: true
+          errCode: '00000003'
+          errMessage: 处理中
+          status: PENDING
+          traceId: 33fae7b7aed1233f
+          data:
+            orderId: '1551424900319940608'
+            merchantNo: '2001000000002036'
+            merchantOrderId: '20220725123000'
+            currency: HKD
+            payMethodResponse:
+              isRedirect: 'NO'
+              redirectMethod: GET
+              termUrl: normalUrl
+              redirectParam: {}
+              codeUrl: 'weixin://wxpay/bizpayurl?pr=waUjCuPzz'
+            transAmt: '3.01'
+    BaseResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: "是否成功\t"
+        errCode:
+          type: string
+          description: "响应状态码，errCode为00000000表示响应成功，其他状态码表示响应失败。具体系统错误码可以参考系统错误码。\t"
+          examples:
+            - '00000003'
+        errMessage:
+          type: string
+          description: "错误消息\t"
+          examples:
+            - 处理中
+        status:
+          type: string
+          description: "订单状态(见补充说明)\t"
+          examples:
+            - PENDING
+        traceId:
+          type: string
+          description: "请求消息唯一标识。traceId为本次调用产生的流水号，接口调用异常，可以提供此流水号用于排查问题。\t"
+          examples:
+            - 33fae7b7aed1233f
+      required:
+        - success
+        - errCode
+        - errMessage
+        - status
+        - traceId
+      x-examples:
+        Example 1:
+          isSuccess: true
+          errCode: '00000003'
+          errMessage: 处理中
+          status: PENDING
+          traceId: 33fae7b7aed1233f
+    QueryRequest:
+      title: QueryRequest
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          properties:
+            merchantOrderId:
+              type: string
+              description: "商户订单号\t"
+              examples:
+                - '20230105586637641001'
+            currency:
+              type: string
+              description: "订单币种[ISO4217](https://www.iso.org/standard/46121.html)币种的字母码 eg. USD, CNY, EUR\t"
+              examples:
+                - USD
+            payAmt:
+              type: string
+              description: "交易金额\t"
+              examples:
+                - '100.01'
+            orderId:
+              type: string
+              description: "订单号\t"
+              examples:
+                - TR1654005852065107968
+          required:
+            - merchantOrderId
+    QueryResponse:
+      title: QueryResponse
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                merchantId:
+                  type: string
+                  description: "商户号\t"
+                  examples:
+                    - '2023010558663764'
+                merchantOrderId:
+                  type: string
+                  description: "商户订单号\t"
+                  examples:
+                    - '20230105586637641001'
+                payMethod:
+                  type: string
+                  description: 支付方式
+                  examples:
+                    - WEIXIN
+                completeTime:
+                  type: string
+                  description: |
+                    完成的时间，遵循[rfc3339](https://datatracker.ietf.org/doc/html/rfc3339)标准格式，格式为yyyy-MM-DDTHH:mm:ssSSS+TIMEZONE，yyyy-MM-DD表示年月日，T出现在字符串中，表示time元素的开头，HH:mm:ss表示时分秒，TIMEZONE表示时区（+08:00表示东八区时间，领先UTC 8小时，即北京时间）。例如：2015-05-20T13:29:35.262+08:00表示，北京时间2015年5月20日13点29分35秒。
+                  format: date-time
+                  examples:
+                    - '2024-07-18T17:03:02.262+08:00'
+                orderId:
+                  type: string
+                  description: "订单号\t"
+                  examples:
+                    - TR1654005852065107968
+                currency:
+                  type: string
+                  description: "订单币种[ISO4217](https://www.iso.org/standard/46121.html)币种的字母码 eg. USD, CNY, EUR\t"
+                  examples:
+                    - USD
+                transAmt:
+                  type: string
+                  description: "交易金额\t"
+                  examples:
+                    - '100.01'
+              required:
+                - merchantId
+                - merchantOrderId
+                - payMethod
+                - completeTime
+                - orderId
+                - currency
+                - transAmt
+    VoidsRequest:
+      title: VoidsRequest
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          properties:
+            merchantOrderId:
+              type: string
+              description: 商户订单号
+              examples:
+                - '20230105586637641001'
+            merchantOrderTime:
+              type: string
+              description: |-
+                商户订单的时间，遵循[rfc3339](https://datatracker.ietf.org/doc/html/rfc3339)标准格式，格式为yyyy-MM-DDTHH:mm:ssSSS+TIMEZONE，yyyy-MM-DD表示年月日，T出现在字符串中，表示time元素的开头，HH:mm:ss表示时分秒，TIMEZONE表示时区（+08:00表示东八区时间，领先UTC 8小时，即北京时间）。例如：2015-05-20T13:29:35.262+08:00表示，北京时间2015年5月20日13点29分35秒。
+                <mark style="color:red;">需要在当前时间两分钟内</mark>
+              format: date-time
+              examples:
+                - '2024-07-18T17:19:59.74+08:00'
+            currency:
+              type: string
+              description: '订单币种[ISO4217](https://www.iso.org/standard/46121.html)币种的字母码 eg. USD, CNY, EUR'
+              examples:
+                - USD
+            transAmt:
+              type: string
+              description: 交易金额
+              examples:
+                - '100.01'
+            notifyUrl:
+              type: string
+              description: 异步通知地址
+            oriMerchantOrderId:
+              type: string
+              description: 原商户订单号
+              examples:
+                - '20230105586637641002'
+            oriOrderId:
+              type: string
+              description: 原订单号
+              examples:
+                - TR1654008732742455296
+            reason:
+              type: string
+              description: 撤销原因
+              examples:
+                - 退货
+          required:
+            - merchantOrderId
+            - merchantOrderTime
+            - currency
+            - transAmt
+            - oriMerchantOrderId
+            - reason
+    VoidsResponse:
+      title: VoidsResponse
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                merchantOrderId:
+                  type: string
+                  description: 商户订单号
+                  examples:
+                    - '20230504142243'
+                merchantId:
+                  type: string
+                  description: 商户号
+                  examples:
+                    - '2023010558663764'
+                orderId:
+                  type: string
+                  description: 订单号
+                  examples:
+                    - TR1654008732742455296
+                completeTime:
+                  type: string
+                  description: '订单完成的时间，遵循[rfc3339](https://datatracker.ietf.org/doc/html/rfc3339)标准格式，格式为yyyy-MM-DDTHH:mm:ssSSS+TIMEZONE，yyyy-MM-DD表示年月日，T出现在字符串中，表示time元素的开头，HH:mm:ss表示时分秒，TIMEZONE表示时区（+08:00表示东八区时间，领先UTC 8小时，即北京时间）。例如：2015-05-20T13:29:35.262+08:00表示，北京时间2015年5月20日13点29分35秒。'
+                  format: date-time
+                  examples:
+                    - '2024-07-18T17:03:02.262+08:00'
+                currency:
+                  type: string
+                  description: '订单币种[ISO4217](https://www.iso.org/standard/46121.html)币种的字母码 eg. USD, CNY, EUR'
+                  examples:
+                    - USD
+                transAmt:
+                  type: string
+                  description: 交易金额
+                  examples:
+                    - '100.01'
+              required:
+                - merchantOrderId
+                - merchantId
+                - orderId
+                - completeTime
+                - currency
+                - transAmt
+    TransferRequest:
+      title: TransferRequest
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          properties:
+            merchantOrderId:
+              type: string
+            currency:
+              type: string
+              description: '订单币种[ISO4217](https://www.iso.org/standard/46121.html)币种的字母码 eg. USD, CNY, EUR'
+              examples:
+                - USD
+            transferAmount:
+              type: string
+              description: 交易金额
+              examples:
+                - '100.01'
+            payeeAccountNo:
+              type: string
+              description: 收款人账户
+              examples:
+                - '6226660605140231'
+            payeeAccountName:
+              type: string
+              description: 收款人账户户名
+              examples:
+                - 张三
+            unionFlag:
+              type: string
+              description: "1：行内转账，0：跨行转账\t"
+              examples:
+                - '0'
+            publicPrivateFlag:
+              type: string
+              description: "对公对私标识 00:对公 01:对私\t"
+              examples:
+                - '00'
+            useOfFunds:
+              type: string
+              description: 资金用途 100个汉字，对方能否看到此用途视收款方银行的支持。
+              examples:
+                - 供应商付款
+            notifyUrl:
+              type: string
+              description: 异步通知地址
+              examples:
+                - 'https://www.gogole.com'
+            payeeBankNumber:
+              type: string
+              description: 收款人开户行行号
+              examples:
+                - '102000001'
+            payeeBankName:
+              type: string
+              description: 收款人开户行名称
+              examples:
+                - 中国工商银行
+          required:
+            - currency
+            - transferAmount
+            - payeeAccountNo
+            - payeeAccountName
+            - unionFlag
+            - publicPrivateFlag
+            - useOfFunds
+            - payeeBankNumber
+            - payeeBankName
+    TransferResponse:
+      title: TransferResponse
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                orderId:
+                  type: string
+                  description: 订单号
+                  examples:
+                    - TR1654008732742455296
+                merchantOrderId:
+                  type: string
+                  description: 商户订单号
+                  examples:
+                    - '20230105586637641001'
+                merchantId:
+                  type: string
+                  description: 商户号
+                  examples:
+                    - '2023010558663764'
+                currency:
+                  type: string
+                  description: '订单币种[ISO4217](https://www.iso.org/standard/46121.html)币种的字母码 eg. USD, CNY, EUR'
+                  examples:
+                    - USD
+                transferAmount:
+                  type: string
+                  description: 交易金额
+                  examples:
+                    - '100.01'
+                payeeBankNumber:
+                  type: string
+                payeeBankName:
+                  type: string
+                payeeAccountNo:
+                  type: string
+                payeeAccountName:
+                  type: string
+                notifyUrl:
+                  type: string
+              required:
+                - orderId
+                - merchantOrderId
+                - merchantId
+                - currency
+                - transferAmount
+    TransferQueryRequest:
+      title: TransferQueryRequest
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          properties:
+            merchantOrderId:
+              type: string
+            orderId:
+              type: string
+    RegistrationRequest:
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          properties:
+            address:
+              type: string
+            agreementFile:
+              type: string
+            business:
+              type: object
+              properties:
+                appDownload:
+                  type: string
+                businessType:
+                  type: string
+                mcc:
+                  type: string
+                miniProgram:
+                  type: string
+                officeAccount:
+                  type: string
+                storeAddress:
+                  type: string
+                storePhotos:
+                  type: string
+                website:
+                  type: string
+            businessAddress:
+              type: string
+            businessPic:
+              type: string
+            certNo:
+              type: string
+            contact:
+              type: object
+              properties:
+                email:
+                  type: integer
+                name:
+                  type: string
+                phone:
+                  type: integer
+            countryCode:
+              type: integer
+            director:
+              type: object
+              properties:
+                name:
+                  type: string
+                number:
+                  type: integer
+                type:
+                  type: string
+            merchantType:
+              type: string
+            phoneNo:
+              type: string
+            principal:
+              type: object
+              properties:
+                name:
+                  type: string
+                number:
+                  type: integer
+                type:
+                  type: string
+            registrationDate:
+              type: string
+            registrationPic:
+              type: string
+            shareholder:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  number:
+                    type: integer
+                  type:
+                    type: string
+            signType:
+              type: string
+            subMcc:
+              type: string
+            subMerchantId:
+              type: integer
+            subMerchantName:
+              type: string
+            subMerchantShort:
+              type: string
+            transType:
+              type: string
+            version:
+              type: string
+      x-examples:
+        Example 1:
+          address: ''
+          agreementFile: ''
+          business:
+            appDownload: 'http://xx'
+            businessType: ONLINE
+            mcc: '0742'
+            miniProgram: wx8888888888888888
+            officeAccount: wx8888888888888888
+            storeAddress: '10F World Finance Centre (South Office), 11 Canton Road, Tsim Sha Tsui, Hong Kong'
+            storePhotos: '1,2'
+            website: 'http://xx'
+          businessAddress: ''
+          businessPic: ''
+          certNo: ''
+          charset: utf-8
+          contact:
+            email: 43121212121212
+            name: 名称
+            phone: 15012341234
+          countryCode: 156
+          director:
+            name: 名称
+            number: 43121212121212
+            type: '01'
+          memberId: 131103337349973170
+          merchantId: 202200000001
+          merchantType: PERSONAL
+          phoneNo: ''
+          principal:
+            name: 名称
+            number: 43121212121212
+            type: '01'
+          registrationDate: '2022-12-19'
+          registrationPic: ''
+          shareholder:
+            - name: 名称
+              number: 43121212121212
+              type: '01'
+          signType: RSA
+          subMcc: '0742'
+          subMerchantId: 12345789
+          subMerchantName: 子商户名称
+          subMerchantShort: 子商户简称
+          transType: PAY
+          version: 2.0.0
+    RegistrationResponse:
+      title: RegistrationResponse
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                subMerchantId:
+                  type: string
+              required:
+                - subMerchantId
+    RegistrationQueryRequest:
+      title: RegistrationQueryRequest
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          properties:
+            subMerchantId:
+              type: string
+              description: "子商户编号,示例值(123456789)\t"
+          required:
+            - subMerchantId
+    RegistrationQueryResponse:
+      title: RegistrationQueryResponse
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                reason:
+                  type: string
+                  description: "拒绝原因(审核拒绝和关闭状态时回返回)\t"
+                status:
+                  type: string
+                  enum:
+                    - INIT
+                    - PENDING
+                    - REJECTED
+                    - APPROVED
+                    - CLOSE
+                  description: "子商户状态(INIT=初始化,PENDING=审核中,REJECTED=审核拒绝,APPROVED=审核成功,CLOSE=关闭)\t"
+    ReportDownloadRequest:
+      title: ReportDownloadRequest
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          properties:
+            reportDate:
+              type: string
+              description: "交易时间\t"
+            reportType:
+              type: string
+              description: "交易类型\t\n值必须为“MER_DAY_UNSETTLED_ORDER”。"
+    ReportDownloadResponse:
+      title: ReportDownloadResponse
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                merchantId:
+                  type: string
+                  description: 商户号
+                  examples:
+                    - '2023010558663764'
+                reportDate:
+                  type: string
+                  description: 报告时间
+                url:
+                  type: string
+                  description: 交易报表地址
+              required:
+                - merchantId
+                - reportDate
+                - url
+    PreAuthCompleteRequest:
+      title: PreAuthComplete
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          properties:
+            merchantOrderId:
+              type: string
+              description: 商户订单号
+              examples:
+                - '20230105586637641001'
+            merchantOrderTime:
+              type: string
+              description: |-
+                商户订单的时间，遵循[rfc3339](https://datatracker.ietf.org/doc/html/rfc3339)标准格式，格式为yyyy-MM-DDTHH:mm:ssSSS+TIMEZONE，yyyy-MM-DD表示年月日，T出现在字符串中，表示time元素的开头，HH:mm:ss表示时分秒，TIMEZONE表示时区（+08:00表示东八区时间，领先UTC 8小时，即北京时间）。例如：2015-05-20T13:29:35.262+08:00表示，北京时间2015年5月20日13点29分35秒。
+                <mark style="color:red;">需要在当前时间两分钟内</mark>
+              format: date-time
+              examples:
+                - '2024-07-18T17:19:59.74+08:00'
+            currency:
+              type: string
+              description: '订单币种[ISO4217](https://www.iso.org/standard/46121.html)币种的字母码 eg. USD, CNY, EUR'
+              examples:
+                - USD
+            transAmt:
+              type: string
+              description: 交易金额
+              examples:
+                - '100.01'
+            notifyUrl:
+              type: string
+            oriMerchantOrderId:
+              type: string
+              description: 原商户订单号
+              examples:
+                - '20230105586637641001'
+            oriOrderId:
+              type: string
+              description: 原订单号
+              examples:
+                - TR1654008732742455296
+            reqReserved:
+              type: string
+              description: "商户扩展字段\t"
+              examples:
+                - 完成
+            reserved:
+              type: string
+              description: 保留域
+              examples:
+                - reserved
+          required:
+            - merchantOrderId
+            - merchantOrderTime
+            - currency
+            - transAmt
+            - oriMerchantOrderId
+    PreAuthCompleteResponse:
+      title: PreAuthCompleteResponse
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                merchantId:
+                  type: string
+                  description: 商户号
+                  examples:
+                    - '2023010558663764'
+                merchantOrderId:
+                  type: string
+                  description: 商户订单号
+                  examples:
+                    - '20230105586637641001'
+                orderId:
+                  type: string
+                  description: 订单号
+                  examples:
+                    - TR1654008732742455296
+                completeTime:
+                  type: string
+                  description: 订单完成时间
+                currency:
+                  type: string
+                  description: '订单币种[ISO4217](https://www.iso.org/standard/46121.html)币种的字母码 eg. USD, CNY, EUR'
+                  examples:
+                    - USD
+                transAmt:
+                  type: string
+                  description: 交易金额
+                  examples:
+                    - '100.01'
+              required:
+                - merchantId
+                - merchantOrderId
+                - orderId
+                - completeTime
+                - currency
+                - transAmt
+    PreAuthVoidRequest:
+      title: PreAuthVoid
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          properties:
+            merchantOrderId:
+              type: string
+              description: 商户订单号
+              examples:
+                - '20230105586637641001'
+            merchantOrderTime:
+              type: string
+              description: |-
+                商户订单的时间，遵循[rfc3339](https://datatracker.ietf.org/doc/html/rfc3339)标准格式，格式为yyyy-MM-DDTHH:mm:ssSSS+TIMEZONE，yyyy-MM-DD表示年月日，T出现在字符串中，表示time元素的开头，HH:mm:ss表示时分秒，TIMEZONE表示时区（+08:00表示东八区时间，领先UTC 8小时，即北京时间）。例如：2015-05-20T13:29:35.262+08:00表示，北京时间2015年5月20日13点29分35秒。
+                <mark style="color:red;">需要在当前时间两分钟内</mark>
+              format: date-time
+              examples:
+                - '2024-07-18T17:19:59.74+08:00'
+            currency:
+              type: string
+              description: '订单币种[ISO4217](https://www.iso.org/standard/46121.html)币种的字母码 eg. USD, CNY, EUR'
+              examples:
+                - USD
+            transAmt:
+              type: string
+              description: 交易金额
+              examples:
+                - '100.01'
+            notifyUrl:
+              type: string
+              description: 异步通知地址
+              examples:
+                - 'https://www.google.com'
+            oriMerchantOrderId:
+              type: string
+              description: 原商户订单号
+              examples:
+                - '20230105586637641001'
+            oriOrderId:
+              type: string
+              description: 原订单号
+              examples:
+                - TR1654008732742455296
+            reqReserved:
+              type: string
+              description: 商户扩展
+              examples:
+                - 扩展
+            reserved:
+              type: string
+              description: 保留域
+              examples:
+                - 保留
+          required:
+            - merchantOrderId
+            - merchantOrderTime
+            - currency
+            - transAmt
+            - oriMerchantOrderId
+    PreAuthVoidResponse:
+      title: PreAuthVoidResponse
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                merchantOrderId:
+                  type: string
+                  examples:
+                    - '20230105586637641001'
+                merchantId:
+                  type: string
+                  examples:
+                    - '2023010558663764'
+                orderId:
+                  type: string
+                  description: 订单号
+                  examples:
+                    - TR1654008732742455296
+                completeTime:
+                  type: string
+                  description: 订单完成时间
+                currency:
+                  type: string
+                  description: '订单币种[ISO4217](https://www.iso.org/standard/46121.html)币种的字母码 eg. USD, CNY, EUR'
+                  examples:
+                    - USD
+                transAmt:
+                  type: string
+                  description: 交易金额
+                  examples:
+                    - '100.01'
+              required:
+                - merchantOrderId
+                - merchantId
+                - orderId
+                - completeTime
+                - currency
+                - transAmt
+    VccAddCardholderReq:
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          properties:
+            email:
+              type: string
+              description: 持卡人的电子邮件地址。
+              format: email
+              examples:
+                - john@example.com
+            individual:
+              type: object
+              description: 持卡人详情。仅与个人持卡人类型相关。
+              properties:
+                address:
+                  type: object
+                  description: 持卡人的街道地址。
+                  properties:
+                    city:
+                      type: string
+                      description: 城市
+                      examples:
+                        - Melbourne
+                    country:
+                      type: string
+                      description: ISO 国家/地区地址代码
+                      examples:
+                        - AU
+                    line1:
+                      type: string
+                      description: 地址第一行
+                      examples:
+                        - 44 Gillespie St
+                    line2:
+                      type: string
+                      description: 地址第 2 行
+                      examples:
+                        - Unit 2
+                    postcode:
+                      type: string
+                      description: 邮政编码
+                      examples:
+                        - '3121'
+                    state:
+                      type: string
+                      description: 州或地区
+                      examples:
+                        - VIC
+                  required:
+                    - city
+                    - country
+                    - line1
+                    - postcode
+                cardholderAgreementTermsConsentObtained:
+                  type: string
+                  description: 仅适用于加拿大实体 - 通过将此字段设置为“是”，您确认您已明确同意这一点。
+                dateOfBirth:
+                  type: string
+                  description: 出生日期，格式为 YYYY-MM-DD。
+                  format: date
+                  examples:
+                    - '1982-11-02'
+                employers:
+                  type: array
+                  description: 个人雇主的信息。
+                  items:
+                    type: object
+                    properties:
+                      businessIdentifiers:
+                        type: array
+                        description: 当地商业登记号码，即企业身份的官方信号。
+                        items:
+                          type: object
+                          properties:
+                            countryCode:
+                              type: string
+                              description: 国家/地区代码。（2 个字母的 ISO 3166-2 国家/地区代码）
+                              examples:
+                                - US
+                            number:
+                              type: string
+                              description: 当地商业登记号码
+                              examples:
+                                - A1098762872
+                            type:
+                              type: string
+                              enum:
+                                - BRN
+                                - EIN
+                                - SSN
+                                - VAT
+                              description: 企业注册号的类型，取决于企业注册所在国家/地区的适用类型。
+                              examples:
+                                - BRN
+                      business_name:
+                        type: string
+                expressConsentObtained:
+                  type: string
+                  description: 通过将此字段设置为“yes”，您确认您已获得此持卡人的明确同意，允许 PayHui 执行姓名和制裁筛选或任何进一步的身份验证（如果需要）。
+                  examples:
+                    - 'yes'
+                identification:
+                  type: object
+                  description: 持卡人信息
+                  properties:
+                    country:
+                      type: string
+                      description: 身份证件的 ISO 国家代码。
+                      examples:
+                        - CN
+                    documentBackFileId:
+                      type: string
+                    documentFrontFileId:
+                      type: string
+                    expiryDate:
+                      type: string
+                      description: 所提供身份证明文件的有效期，格式为 YYYY-MM-DD。
+                      examples:
+                        - '2039-05-30'
+                    gender:
+                      type: string
+                      enum:
+                        - M
+                        - F
+                      examples:
+                        - M
+                    number:
+                      type: string
+                      description: 证件号码。可以是驾照号码或护照号码和身份证号。
+                      examples:
+                        - '411302199008303418'
+                    state:
+                      type: string
+                    type:
+                      type: string
+                      enum:
+                        - PASSPORT
+                        - DRIVERS_LICENSE
+                        - ID_CARD
+                      description: 身份证明的类型。可以是 PASSPORT、DRIVERS_LICENSE 或 ID_CARD。
+                  required:
+                    - country
+                    - expiryDate
+                    - gender
+                    - type
+                name:
+                  type: object
+                  description: 个人全名，仅支持英文字符。
+                  properties:
+                    firstName:
+                      type: string
+                      description: 持卡人的名字。
+                      examples:
+                        - John
+                    lastName:
+                      type: string
+                      description: 持卡人的姓氏。
+                      examples:
+                        - Smith
+                    middleName:
+                      type: string
+                      description: 持卡人的中间名（可选）。
+                      examples:
+                        - Fitzgerald
+                    title:
+                      type: string
+                      description: 持卡人的可选称谓。
+                      examples:
+                        - Mr
+                  required:
+                    - firstName
+                    - lastName
+                nationality:
+                  type: string
+                  description: 个人国籍对应的 2 个字母 ISO 国家代码。
+                  examples:
+                    - US
+                paperless_notification_consent_obtained:
+                  type: string
+                privacy_policy_terms_consent_obtained:
+                  type: string
+                  description: 通过将此字段设置为“yes”，您确认您同意隐私政策的条款。
+              required:
+                - address
+                - dateOfBirth
+                - expressConsentObtained
+                - identification
+                - name
+                - nationality
+            mobileNumber:
+              type: string
+              description: 持卡人的手机号码。
+              examples:
+                - '61432100100'
+            mobilePrefix:
+              type: string
+              description: 手机号前缀（包括区号）
+              examples:
+                - '+86'
+            postalAddress:
+              type: object
+              description: 持卡人邮政地址（可选）。仅当地址不同且需发行实体卡时才需要。
+              allOf:
+                - type: object
+                  properties:
+                    city:
+                      type: string
+                    country:
+                      type: string
+                    line1:
+                      type: string
+                    line2:
+                      type: string
+                    postcode:
+                      type: string
+                    state:
+                      type: string
+            type:
+              type: string
+              enum:
+                - INDIVIDUAL
+                - DELEGATE
+              description: |-
+                持卡人类型。个人 (INDIVIDUAL) 或代表 (DELEGATE) 之一，定义如下：
+                个人 (INDIVIDUAL)：与贵公司指定个人代表关联的持卡人。可与个人化或非个人化卡片关联。
+                代表 (DELEGATE)：仅可指定使用非个人化卡片的持卡人，并作为卡片的授权用户。
+              examples:
+                - INDIVIDUAL
+          required:
+            - email
+            - individual
+            - mobileNumber
+            - mobilePrefix
+            - type
+      x-examples:
+        Example 1:
+          email: john@example.com
+          individual:
+            address:
+              city: Melbourne
+              country: AU
+              line1: 44 Gillespie St
+              line2: Unit 2
+              postcode: '3121'
+              state: VIC
+            cardholder_agreement_terms_consent_obtained: 'yes'
+            date_of_birth: '1982-11-02'
+            employers:
+              - business_identifiers:
+                  - country_code: US
+                    number: A1098762872
+                    type: BRN
+                business_name: string
+            express_consent_obtained: 'yes'
+            identification:
+              country: AU
+              document_back_file_id: NzI3ZDAxM2ItZjMzMC00ZDIyLTk4YTQtMTE3ZTA0MjdhZTUyLHwsaG9uZ2tvbmcsfCxwYXNzcG9ydC5qcGdfMTYwNzY0MDI4OQ==
+              document_front_file_id: NzI3ZDAxM2ItZjMzMC00ZDIyLTk4YTQtMTE3ZTA0MjdhZTUyLHwsaG9uZ2tvbmcsfCxwYXNzcG9ydC5qcGdfMTYwNzY0MDI4OQ==
+              expiry_date: '2028-08-28'
+              gender: F
+              number: '001238243'
+              state: NT
+              type: DRIVERS_LICENSE
+            name:
+              first_name: John
+              last_name: Smith
+              middle_name: Fitzgerald
+              title: Mr
+            nationality: UK
+            paperless_notification_consent_obtained: 'yes'
+            privacy_policy_terms_consent_obtained: 'yes'
+          mobile_number: '61432100100'
+          postal_address:
+            city: Melbourne
+            country: AU
+            line1: 44 Gillespie St
+            line2: Unit 2
+            postcode: '3121'
+            state: VIC
+          type: INDIVIDUAL
+    VccAddCardholderResp:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                cardholderId:
+                  type: string
+                  description: 持卡人的唯一标识符。
+                  examples:
+                    - CH1654040500572917760
+                email:
+                  type: string
+                  description: 持卡人的电子邮件地址。
+                status:
+                  type: string
+                  description: |-
+                    持卡人状态。状态包括“待处理 (PENDING)”、“就绪 (READY)”、“已禁用 (DISABLED)”或“未完成 (INCOMPLETE)”，定义如下：
+                    待处理 (PENDING)：持卡人当前正在审核中。
+                    就绪 (READY)：持卡人已准备好接收卡片。
+                    未完成 (INCOMPLETE)：持卡人记录信息不完整或需要更多数据才能将其转为“就绪 (READY)”。
+                    已删除 (DELETED)：持卡人记录已被删除。
+                cardholderReviewStatus:
+                  type: string
+                type:
+                  type: string
+                  description: |-
+                    持卡人类型。个人 (INDIVIDUAL) 或代表 (DELEGATE) 之一，定义如下：
+                    个人 (INDIVIDUAL)：与贵公司指定个人代表关联的持卡人。可与个人化或非个人化卡片关联。
+                    代表 (DELEGATE)：仅可指定使用非个人化卡片的持卡人，并作为卡片的授权用户。
+                  examples:
+                    - INDIVIDUAL
+                reason:
+                  type: string
+                mobileNumber:
+                  type: string
+              required:
+                - cardholderId
+                - email
+      x-examples:
+        Example 1:
+          data:
+            cardholderId: CH1654040500572917760
+            status: Normal
+            cardholderReviewStatus: pending
+            reason: xxxxxxxxxxxx
+    VccCardholdersGetsReq:
+      title: VccCardholdersGetsReq
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          properties:
+            cardholderStatus:
+              type: string
+            fromCreatedAt:
+              type: string
+              description: '开始时间，符合rfc3339规范，格式：yyyy-MM-dd''T''HH:mm:ss.SSSXXX '
+              examples:
+                - '2025-05-01T14:29:32.682+08:00'
+            toCreatedAt:
+              type: string
+              description: '结束时间，符合rfc3339规范，格式：yyyy-MM-dd''T''HH:mm:ss.SSSXXX '
+              examples:
+                - '2025-05-24T14:29:32.682+08:00'
+            pageNum:
+              type: string
+              description: |
+                Page number, starts from 1.
+              examples:
+                - '1'
+            pageSize:
+              type: string
+              description: Number of results per page
+              examples:
+                - '10'
+          required:
+            - fromCreatedAt
+            - toCreatedAt
+            - pageNum
+            - pageSize
+    VccCardholdersGetsRes:
+      title: VccCardholdersGetsRes
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            pageNum:
+              type: integer
+            pageSize:
+              type: integer
+            total:
+              type: string
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/Individual'
+    Individual:
+      type: object
+      properties:
+        cardholderId:
+          type: string
+        email:
+          type: string
+          description: 持卡人的电子邮件地址。
+          format: email
+          examples:
+            - john@example.com
+        individual:
+          type: object
+          description: 持卡人详情。仅与个人持卡人类型相关。
+          properties:
+            address:
+              type: object
+              description: 持卡人的街道地址。
+              properties:
+                city:
+                  type: string
+                  description: 地址城市
+                  examples:
+                    - Melbourne
+                country:
+                  type: string
+                  description: ISO 国家/地区地址代码
+                  examples:
+                    - AU
+                line1:
+                  type: string
+                  description: 地址第一行
+                  examples:
+                    - 44 Gillespie St
+                line2:
+                  type: string
+                  description: |
+                    地址第 2 行
+                  examples:
+                    - Unit 2
+                postcode:
+                  type: string
+                  description: 地址邮政编码
+                  examples:
+                    - '3121'
+                state:
+                  type: string
+                  description: 地址州或地区
+                  examples:
+                    - VIC
+              required:
+                - city
+                - country
+                - line1
+                - postcode
+            cardholder_agreement_terms_consent_obtained:
+              type: string
+            dateOfBirth:
+              type: string
+              description: 个人的出生日期，格式为 YYYY-MM-DD。
+              examples:
+                - '1982-11-02'
+            employers:
+              type: array
+              items:
+                type: object
+                properties:
+                  business_identifiers:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        country_code:
+                          type: string
+                        number:
+                          type: string
+                        type:
+                          type: string
+                  business_name:
+                    type: string
+            express_consent_obtained:
+              type: string
+            identification:
+              type: object
+              description: 个人持卡人身份证明。此对象为可选，仅当姓名筛选失败或 PayHui 认为您的集成需要时才需要。
+              properties:
+                country:
+                  type: string
+                  description: 身份证件的 ISO 国家代码。
+                  examples:
+                    - AU
+                document_back_file_id:
+                  type: string
+                  description: 指定文档背面图片的 ID。您可以通过将文件上传到 API 中的文件上传端点来获取此 ID。
+                  examples:
+                    - NzI3ZDAxM2ItZjMzMC00ZDIyLTk4YTQtMTE3ZTA0MjdhZTUyLHwsaG9uZ2tvbmcsfCxwYXNzcG9ydC5qcGdfMTYwNzY0MDI4OQ==
+                document_front_file_id:
+                  type: string
+                  description: 指定文档正面图片的 ID。您可以通过将文件上传到 API 中的文件上传端点来获取此 ID。
+                  examples:
+                    - NzI3ZDAxM2ItZjMzMC00ZDIyLTk4YTQtMTE3ZTA0MjdhZTUyLHwsaG9uZ2tvbmcsfCxwYXNzcG9ydC5qcGdfMTYwNzY0MDI4OQ==
+                expiry_date:
+                  type: string
+                  description: 所提供身份证明文件的有效期，格式为 YYYY-MM-DD。
+                  examples:
+                    - '2028-08-28'
+                gender:
+                  type: string
+                  description: 性别请以英国驾照上注明的为准。其他身份证明类型无需填写。
+                  examples:
+                    - F
+                state:
+                  type: string
+                  examples:
+                    - NT
+                number:
+                  type: string
+                  description: |
+                    证件号码。可以是驾照号码或护照号码。
+                  examples:
+                    - '001238243'
+                type:
+                  type: string
+                  enum:
+                    - DRIVERS_LICENSE
+                    - PASSPORT
+                    - ID_CARD
+                  description: 所提供身份证明的类型。可以是 PASSPORT、DRIVERS_LICENSE 或 ID_CARD。
+                  examples:
+                    - DRIVERS_LICENSE
+              required:
+                - country
+                - document_back_file_id
+                - document_front_file_id
+                - expiry_date
+                - number
+                - type
+            name:
+              type: object
+              description: 个人全名，仅支持英文字符。
+              properties:
+                first_name:
+                  type: string
+                  description: 持卡人的名字。
+                  examples:
+                    - John
+                last_name:
+                  type: string
+                  description: 持卡人的姓氏。
+                  examples:
+                    - Smith
+                middle_name:
+                  type: string
+                  description: 持卡人的中间名（可选）。
+                  examples:
+                    - Fitzgerald
+                title:
+                  type: string
+                  description: 持卡人的可选称谓。
+                  examples:
+                    - Mr
+            nationality:
+              type: string
+              description: 个人国籍对应的 2 个字母 ISO 国家代码。
+              examples:
+                - UK
+            paperless_notification_consent_obtained:
+              type: string
+            privacy_policy_terms_consent_obtained:
+              type: string
+          required:
+            - address
+            - dateOfBirth
+            - identification
+            - name
+            - nationality
+        mobileNumber:
+          type: string
+          description: 持卡人的手机号码。
+          examples:
+            - '61432100100'
+        postalAddress:
+          type: object
+          description: 持卡人邮政地址（**optional**）。仅当地址不同且需发行实体卡时才需要。
+          properties:
+            city:
+              type: string
+              description: 地址城市
+              examples:
+                - Melbourne
+            country:
+              type: string
+              description: ISO 国家/地区地址代码
+              examples:
+                - AU
+            line1:
+              type: string
+              description: 地址第一行
+              examples:
+                - 44 Gillespie St
+            line2:
+              type: string
+              description: 地址第 2 行
+              examples:
+                - Unit 2
+            postcode:
+              type: string
+              description: 地址邮政编码
+              examples:
+                - '3121'
+            state:
+              type: string
+              description: 州或地区
+              examples:
+                - VIC
+          required:
+            - city
+            - country
+            - line1
+            - postcode
+        type:
+          type: string
+          enum:
+            - INDIVIDUAL
+            - DELEGATE
+          description: |
+            > **注意**  
+            > 持卡人类型。个人 (INDIVIDUAL) 或代表 (DELEGATE) 之一，定义如下：
+            个人 (INDIVIDUAL)：与贵公司指定个人代表关联的持卡人。可与个人化或非个人化卡片关联。
+            代表 (DELEGATE)：仅可指定使用非个人化卡片的持卡人，并作为卡片的授权用户。 
+      required:
+        - email
+        - individual
+        - mobileNumber
+      x-examples:
+        Example 1:
+          email: john@example.com
+          individual:
+            address:
+              city: Melbourne
+              country: AU
+              line1: 44 Gillespie St
+              line2: Unit 2
+              postcode: '3121'
+              state: VIC
+            cardholder_agreement_terms_consent_obtained: 'yes'
+            date_of_birth: '1982-11-02'
+            employers:
+              - business_identifiers:
+                  - country_code: US
+                    number: A1098762872
+                    type: BRN
+                business_name: string
+            express_consent_obtained: 'yes'
+            identification:
+              country: AU
+              document_back_file_id: NzI3ZDAxM2ItZjMzMC00ZDIyLTk4YTQtMTE3ZTA0MjdhZTUyLHwsaG9uZ2tvbmcsfCxwYXNzcG9ydC5qcGdfMTYwNzY0MDI4OQ==
+              document_front_file_id: NzI3ZDAxM2ItZjMzMC00ZDIyLTk4YTQtMTE3ZTA0MjdhZTUyLHwsaG9uZ2tvbmcsfCxwYXNzcG9ydC5qcGdfMTYwNzY0MDI4OQ==
+              expiry_date: '2028-08-28'
+              gender: F
+              number: '001238243'
+              state: NT
+              type: DRIVERS_LICENSE
+            name:
+              first_name: John
+              last_name: Smith
+              middle_name: Fitzgerald
+              title: Mr
+            nationality: UK
+            paperless_notification_consent_obtained: 'yes'
+            privacy_policy_terms_consent_obtained: 'yes'
+          mobile_number: '61432100100'
+          postal_address:
+            city: Melbourne
+            country: AU
+            line1: 44 Gillespie St
+            line2: Unit 2
+            postcode: '3121'
+            state: VIC
+          type: INDIVIDUAL
+    VccCardholdersDetailsReq:
+      title: VccCardholdersDetailsReq
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          properties:
+            cardholderId:
+              type: string
+              description: 持卡人唯一标识符
+              examples:
+                - 6c2dc266-09ad-4235-b61a-767c7cd6d6ea
+          required:
+            - cardholderId
+          default: cardholderId
+          examples:
+            - cardholderId
+    VccCardholdersDetailsRes:
+      title: VccCardholdersDetailsRes
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/Individual'
+    VccCardholdersUpdateReq:
+      title: VccCardholdersUpdateReq
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - $ref: '#/components/schemas/Individual'
+    VccCardholdersDeleteReq:
+      title: VccCardholdersDeleteReq
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          properties:
+            cardholderId:
+              type: string
+              description: 用卡人 ID
+              examples:
+                - '1747902589015566100'
+          required:
+            - cardholderId
+    VccCardsGetCardBinsReq:
+      title: VccCardsGetCardBinsReq
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          properties:
+            cardFormFactor:
+              type: string
+              enum:
+                - PHYSICAL
+                - VIRTUAL
+              description: 卡介质。
+              examples:
+                - VIRTUAL
+            cardType:
+              type: string
+              enum:
+                - SINGLE
+                - SHARE
+              description: |-
+                卡类型
+                *   SINGLE - A single card only has prepaid mode.
+                *   SHARE - A share card can have debit mode, meaning it is associated with debit program and account.
+              examples:
+                - SHARE
+            cardScheme:
+              type: string
+              enum:
+                - MasterCard
+                - VISA
+              description: |
+                卡组织
+              examples:
+                - VISA
+            cardCurrency:
+              type: string
+              enum:
+                - USD
+                - EUR
+                - GBP
+              description: 卡币种
+              examples:
+                - USD
+          required:
+            - cardFormFactor
+            - cardType
+            - cardScheme
+            - cardCurrency
+    VccCardsGetCardBinsRes:
+      title: VccCardsGetCardBinsRes
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              description: 返回的对象
+              properties:
+                cardBin:
+                  type: string
+                  description: 卡bin。
+                  examples:
+                    - '4133333'
+                cardCurrency:
+                  type: string
+                  description: 卡bin支持的币种。多个币种用逗号分隔。
+                  examples:
+                    - USD
+                cardScheme:
+                  type: string
+                  description: 卡组织
+                cardType:
+                  type: string
+                  enum:
+                    - SINGLE
+                    - SHARE
+                  description: |-
+                    *   SINGLE - A single card only has prepaid mode.
+                    *   SHARE - A share card can have debit mode, meaning it is associated with debit program and account.
+                  examples:
+                    - SINGLE
+                cardFormFactor:
+                  type: string
+                  enum:
+                    - VIRTUAL
+                    - PHYSICAL
+                  description: 卡介质
+                  examples:
+                    - VIRTUAL
+                billingAddressUpdatable:
+                  type: string
+                  enum:
+                    - 'Y'
+                    - 'N'
+                  description: 当值为'Y'此卡支持更新账单地址；值为'N'则此卡不支持变更账单地址。
+                  examples:
+                    - 'Y'
+                expiryDateCustomization:
+                  type: string
+                  enum:
+                    - 'Y'
+                    - 'N'
+                  description: 有效期自定义
+                  examples:
+                    - 'Y'
+                remainingAvailableCard:
+                  type: string
+                  description: 此卡BIN当前剩余可开卡的数量，Unlimited 为不限制
+                availableCard:
+                  type: string
+                  description: 此卡BIN 已开卡并可用的卡数量（不包含销卡及过期）
+    VccCardsCreateReq:
+      title: VccCardsCreateReq
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          properties:
+            activateOnIssue:
+              type: string
+            brand:
+              type: string
+              enum:
+                - VISA
+                - MASTERCARD
+              description: 卡组织
+            cardholderId:
+              type: string
+              description: 与此卡关联的持卡人的 ID。
+              examples:
+                - '1655210317502593'
+            clientData:
+              type: string
+            createdBy:
+              type: string
+            formFactor:
+              type: string
+              enum:
+                - PHYSICAL
+                - VIRTUAL
+              description: 卡介质
+              examples:
+                - PHYSICAL
+            fundingSourceId:
+              type: string
+            isPersonalized:
+              type: string
+            nickName:
+              type: string
+              description: 卡片的昵称
+              examples:
+                - 测试卡
+            note:
+              type: string
+            purpose:
+              type: string
+              enum:
+                - BUSINESS_EXPENSES
+                - CLIENT_EXPENSES
+                - MARKETING_EXPENSES
+                - OFFICE_SUPPLIES
+                - ONLINE_PURCHASING
+                - OTHER
+                - SUBSCRIPTIONS
+                - TEAM_EXPENSES
+                - TRAVEL_EXPENSES
+              default: BUSINESS_EXPENSES
+              examples:
+                - BUSINESS_EXPENSES
+            requestId:
+              type: string
+              description: 商户请求流水号
+              examples:
+                - '2025061203333'
+            postalAddressId:
+              type: string
+              description: 收件人 ID，实体卡必填
+              maxLength: 32
+              examples:
+                - '622666661111111111'
+            cardBin:
+              type: string
+              description: 卡bin信息
+              examples:
+                - '5223444'
+            cardCurrency:
+              type: string
+              description: '卡本币,订单币种[ISO4217](https://www.iso.org/standard/46121.html)币种的字母码 eg. USD, CNY, EUR'
+              examples:
+                - USD
+            cardType:
+              type: string
+              enum:
+                - SINGLE
+                - SHARE
+              description: |-
+                *   SINGLE - A single card only has prepaid mode.
+                *   SHARE - A share card can have debit mode, meaning it is associated with debit program and account.
+            amount:
+              type: number
+              description: 金额 请按照4217币种的最小单位传递 eg.(CNY) 110.86  (JPY) 1110
+              examples:
+                - 100.01
+          required:
+            - brand
+            - cardholderId
+            - formFactor
+            - nickName
+            - purpose
+            - requestId
+            - cardBin
+            - cardCurrency
+            - cardType
+            - amount
+    VccCardsCreateRes:
+      title: VccCardsCreateRes
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  description: 商户请求流水号
+                  examples:
+                    - '20230504153817'
+                cardStatus:
+                  type: string
+                  enum:
+                    - PENDING
+                    - ACTIVE
+                    - INACTIVE
+                    - BLOCKED
+                    - LOST
+                    - STOLEN
+                    - CLOSED
+                    - FAILED
+                    - EXPIRED
+                  description: 卡状态
+                  examples:
+                    - ACTIVE
+                cardId:
+                  type: string
+                  description: 卡ID，每张卡的唯一编号
+                  examples:
+                    - '1655210317502594'
+                cardNo:
+                  type: string
+                  description: 卡号
+                  examples:
+                    - '5561671234566189'
+                cardCurrency:
+                  type: string
+                  description: 卡本币
+                  examples:
+                    - USD
+                cardScheme:
+                  type: string
+                  description: 卡组织
+                cardFormFactor:
+                  type: string
+                  description: 卡介质
+                  examples:
+                    - virtual_card
+                cardType:
+                  type: string
+                  description: 卡类型
+                  examples:
+                    - share
+                cvv:
+                  type: string
+                  description: cvv
+                  examples:
+                    - '123'
+                expiryYear:
+                  type: string
+                  description: 卡有效期年
+                  examples:
+                    - '2029'
+                expiryMonth:
+                  type: string
+                  description: 卡有效期月
+                  examples:
+                    - '10'
+                cardBalance:
+                  type: string
+                  description: 卡金额
+                  examples:
+                    - '100.01'
+    VccCardsGetSensitiveReq:
+      title: VccCardsGetSensitiveReq
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          properties:
+            cardId:
+              type: string
+              description: 卡的唯一标识符
+              examples:
+                - 7f687fe6-dcf4-4462-92fa-80335301d9d2
+          required:
+            - cardId
+    VccCardsGetSensitiveRes:
+      title: VccCardsGetSensitiveRes
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                cardNumber:
+                  type: string
+                  description: 卡号
+                  examples:
+                    - '4111111111111111'
+                cvv:
+                  type: string
+                  description: 卡验证值
+                  examples:
+                    - '123'
+                expiryMonth:
+                  type: string
+                  description: 卡到期月份
+                  examples:
+                    - '01'
+                expiryYear:
+                  type: string
+                  description: 卡到期年份
+                  examples:
+                    - '2022'
+                nameOnCard:
+                  type: string
+                  description: 卡上印有姓名
+                  examples:
+                    - John Smith
+              required:
+                - cardNumber
+                - cvv
+                - expiryMonth
+                - expiryYear
+                - nameOnCard
+    CardsPostalCreateReq:
+      title: CardsPostalCreateReq
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          properties:
+            mobilePrefix:
+              type: string
+              description: 手机号前缀（包括区号），前面加 符号和1-4位的国家呼叫代码。不要包括连字符、空格或括号。
+              examples:
+                - '+86'
+            requestId:
+              type: string
+              description: 商户请求 ID
+              examples:
+                - RI1654040500572917760
+            mobile:
+              type: string
+              description: 手机号。
+              examples:
+                - '18117558917'
+            address:
+              type: object
+              properties:
+                city:
+                  type: string
+                  description: 城市。
+                  examples:
+                    - ShangHai
+                country:
+                  type: string
+                  description: 国籍国家码二字码。
+                  examples:
+                    - AU
+                line1:
+                  type: string
+                  description: 详细地址第一行地址（在信封上展示）长度最多50。
+                  examples:
+                    - 44 Gillespie St
+                line2:
+                  type: string
+                  description: 第二行地址（在信封上展示）长度最多50。
+                  examples:
+                    - Unit 2
+                postcode:
+                  type: string
+                  description: 邮政编码。
+                  examples:
+                    - '3121'
+                state:
+                  type: string
+                  description: 省份/州。
+                  examples:
+                    - VIC
+              required:
+                - city
+                - country
+                - line1
+                - line2
+                - postcode
+                - state
+          required:
+            - mobilePrefix
+            - mobile
+            - address
+    CardsPostalCreateRes:
+      title: CardsPostalCreateRes
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                postalId:
+                  type: string
+    CardsPostalUpdateReq:
+      title: CardsPostalUpdateReq
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          properties:
+            postalId:
+              type: string
+            mobilePrefix:
+              type: string
+            requestId:
+              type: string
+            mobile:
+              type: string
+            address:
+              type: object
+              properties:
+                city:
+                  type: string
+                country:
+                  type: string
+                line1:
+                  type: string
+                line2:
+                  type: string
+                postcode:
+                  type: string
+                state:
+                  type: string
+          required:
+            - postalId
+    CardsCreateQueryReq:
+      title: CardsCreateQueryReq
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          properties:
+            requestId:
+              type: string
+          required:
+            - requestId
+    CardsFreezeReq:
+      title: CardsFreezeReq
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          properties:
+            cardId:
+              type: string
+              description: 卡ID
+              examples:
+                - '1655900976772226'
+            requestId:
+              type: string
+              description: 商户请求流水号
+              examples:
+                - '1655900976772226'
+            status:
+              type: string
+              enum:
+                - FREEZE
+                - UNFREEZE
+              description: freeze：冻结卡； unfreeze：解冻卡。
+              examples:
+                - FREEZE
+          required:
+            - cardId
+            - requestId
+            - status
+    CardsCancelReq:
+      title: CardsCancelReq
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          properties:
+            cardId:
+              type: string
+              description: 卡 ID
+              examples:
+                - '1655900976772226'
+            requestId:
+              type: string
+              description: 商户请求 ID
+              examples:
+                - '1655900976772226'
+          required:
+            - cardId
+            - requestId
+    CardsTransactionsReq:
+      title: CardsTransactionsReq
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          properties:
+            cardId:
+              type: string
+            pageNum:
+              type: string
+            pageSize:
+              type: string
+            fromCreatedAt:
+              type: string
+            toCreatedAt:
+              type: string
+            transactionType:
+              type: string
+    CardsTransactionsRes:
+      title: CardsTransactionsRes
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            pageNum:
+              type: integer
+            pageSize:
+              type: integer
+            total:
+              type: number
+            data:
+              type: array
+              description: 交易明细
+              items:
+                $ref: '#/components/schemas/CardsTransactionsDto'
+          required:
+            - pageNum
+            - pageSize
+            - total
+    CardsTransactionsDto:
+      type: object
+      title: CardsTransactionsDto
+      properties:
+        cardId:
+          type: string
+          description: 卡的唯一标识符
+        maskedCardNumber:
+          type: string
+          description: 脱敏卡号
+          examples:
+            - '************4242'
+        transactionAmount:
+          type: string
+          description: 交易金额
+          examples:
+            - '100.01'
+        transactionCurrency:
+          type: string
+          description: 交易币种
+        transactionDate:
+          type: string
+          description: 交易日期
+        transactionType:
+          type: string
+          enum:
+            - AUTHORIZATION
+            - CLEARING
+            - REFUND
+            - REVERSAL
+            - ORIGINAL_CREDIT
+          description: 交易类型
+          examples:
+            - AUTHORIZATION
+        transactionId:
+          type: string
+          description: uuid
+          examples:
+            - 6c2dc266-09ad-4235-b61a-767c7cd6d6ea
+        merchant:
+          $ref: '#/components/schemas/MerchantDto'
+          description: 卡交易的商户
+    MerchantDto:
+      type: object
+      title: MerchantDto
+      properties:
+        city:
+          type: string
+          description: Merchant city
+          examples:
+            - San Francisco
+        country:
+          type: string
+          description: 'Merchant country. Note: this field might prefixed with state name for some countries, e.g. TXUSA, you should parse the last 3 characters for country code.'
+          examples:
+            - USA
+        categoryCode:
+          type: string
+          description: Merchant category code
+          examples:
+            - '4829'
+        identifier:
+          type: string
+          examples:
+            - '012345678910123'
+        name:
+          type: string
+          description: Merchant name
+          examples:
+            - Merchant A
+        postcode:
+          type: string
+          description: 'Merchant postcode (only for merchants within the US, Canada or Brazil)'
+          examples:
+            - '94111'
+    CardsPostalGetsReq:
+      title: CardsPostalGetsReq
+      allOf:
+        - $ref: '#/components/schemas/BasePageRequest'
+        - type: object
+          properties:
+            status:
+              type: string
+            fromCreatedAt:
+              type: string
+              description: '查询开始时间，符合rfc3339规范，格式：yyyy-MM-dd''T''HH:mm:ss.SSSXXX '
+              examples:
+                - '2024-05-24T14:29:32.682+08:00'
+            toCreatedAt:
+              type: string
+              description: '查询结束时间，符合rfc3339规范，格式：yyyy-MM-dd''T''HH:mm:ss.SSSXXX '
+    BasePageRequest:
+      title: BasePageRequest
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          properties:
+            pageNum:
+              type: integer
+              description: Page number
+            pageSize:
+              type: integer
+              description: Number of results per page
+          required:
+            - pageNum
+            - pageSize
+    CardsPostalGetsRes:
+      title: CardsPostalGetsRes
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            pageNum:
+              type: string
+              examples:
+                - '0'
+            pageSize:
+              type: string
+              examples:
+                - '10'
+            total:
+              type: string
+              examples:
+                - '10'
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/CardsPostalDto'
+          required:
+            - pageNum
+            - pageSize
+            - total
+    CardsPostalDto:
+      type: object
+      title: CardsPostalDto
+      properties:
+        id:
+          type: string
+        mobilePrefix:
+          type: string
+        requestId:
+          type: string
+        mobile:
+          type: string
+        address:
+          $ref: '#/components/schemas/AddressDto'
+    AddressDto:
+      type: object
+      title: AddressDto
+      properties:
+        city:
+          type: string
+        country:
+          type: string
+        line1:
+          type: string
+        line2:
+          type: string
+        postcode:
+          type: string
+        state:
+          type: string
+    CardsDetailsReq:
+      title: CardsDetailsReq
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          properties:
+            cardId:
+              type: string
+              description: Unique Identifier for card
+              examples:
+                - 6c2dc266-09ad-4235-b61a-767c7cd6d6ea
+          required:
+            - cardId
+    CardsDetailsRes:
+      title: CardsDetailsRes
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/CardsDetailsDto'
+    CardsDetailsDto:
+      type: object
+      title: CardsDetailsDto
+      properties:
+        cardId:
+          type: string
+          description: Unique Identifier for card
+          examples:
+            - 6c2dc266-09ad-4235-b61a-767c7cd6d6ea
+        cardNumber:
+          type: string
+          description: |
+            卡号
+          examples:
+            - '4111114886513732'
+        cardCurrency:
+          type: string
+          description: 卡本币
+          examples:
+            - USD
+        brand:
+          type: string
+          enum:
+            - VISA
+            - MASTERCARD
+          description: 卡组织
+          examples:
+            - MASTERCARD
+        cardStatus:
+          type: string
+          enum:
+            - PENDING
+            - FAILED
+            - INACTIVE
+            - ACTIVE
+            - LOST
+            - STOLEN
+            - CLOSED
+            - BLOCKED
+            - EXPIRED
+            - UNKNOWN
+          description: 卡状态
+          examples:
+            - ACTIVE
+        cardType:
+          type: string
+          enum:
+            - SHARE
+            - RECHARGE
+          description: 卡类型
+        createdAt:
+          type: string
+          description: 创建时间
+          examples:
+            - '2018-10-31T00:00:00+0800'
+        cardholderId:
+          type: string
+          description: 持卡人 ID
+          examples:
+            - 7f687fe6-dcf4-4462-92fa-80335301d9d2
+        nameOnCard:
+          type: string
+          description: 卡面上的用卡人姓名
+          examples:
+            - John Smith
+        merchantId:
+          type: string
+          description: 商户号
+          examples:
+            - '80000111111'
+        email:
+          type: string
+          description: 邮箱
+          examples:
+            - john@example.com
+        expiryMonth:
+          type: string
+          description: 过期月
+          examples:
+            - '08'
+        expiryYear:
+          type: string
+          description: 有效期年
+          examples:
+            - '2050'
+        name:
+          type: object
+          properties:
+            firstName:
+              type: string
+              description: 名字
+              examples:
+                - John
+            lastName:
+              type: string
+              description: 姓氏
+              examples:
+                - Smith
+            middleName:
+              type: string
+              description: Optional middle name of cardholder.
+              examples:
+                - Fitzgerald
+            title:
+              type: string
+              description: Optional title of cardholder.
+              examples:
+                - Mr
+        maskCardNumber:
+          type: string
+          description: 脱敏卡号
+          examples:
+            - 411111******3731
+        mobile:
+          type: string
+          description: 手机号
+          examples:
+            - '18117558917'
+        mobilePrefix:
+          type: string
+          description: 手机号前缀
+          examples:
+            - '+86'
+        nickname:
+          type: string
+          description: A nick name for the card
+          examples:
+            - travelling
+        purpose:
+          type: string
+        cardBalance:
+          type: string
+          description: 卡余额
+          examples:
+            - '100.01'
+      required:
+        - cardId
+        - cardNumber
+        - cardCurrency
+        - brand
+        - cardStatus
+    CardRechargeReq:
+      title: CardRechargeReq
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          properties:
+            requestId:
+              type: string
+              description: 商户请求订单号
+              maxLength: 32
+              examples:
+                - c0cef051-29c5-4796-b86a-cd5ee34bfad7
+            cardId:
+              type: string
+              description: 卡 ID
+              examples:
+                - 71fdb0fe-9682-457a-9361-e8868694f12f
+            cardCurrency:
+              type: string
+              description: '充值币种[ISO4217](https://www.iso.org/standard/46121.html)币种的字母码 eg. USD, CNY, EUR'
+            amount:
+              type: string
+              description: 充值金额 请按照4217币种的最小单位传递 eg.(CNY) 110.86  (JPY) 1110
+          required:
+            - requestId
+            - cardId
+            - cardCurrency
+            - amount
+    CardRechargeResDto:
+      title: CardRechargeResDto
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                cardId:
+                  type: string
+                  description: 卡 ID
+                  examples:
+                    - 71fdb0fe-9682-457a-9361-e8868694f12f
+                orderId:
+                  type: string
+                  description: orderId
+                  pattern: 71fdb0fe-9682-457a-9361-e8868694f125
+                orderType:
+                  type: string
+                  description: 订单类型
+                cardCurrency:
+                  type: string
+                  description: 充值币种
+                  examples:
+                    - USD
+                amount:
+                  type: number
+                  description: 充值金额
+                  examples:
+                    - 100.01
+                orderStatus:
+                  type: string
+                  enum:
+                    - PENDING
+                    - SUCCESS
+                    - FAIL
+                  description: 订单状态
+                  examples:
+                    - PENDING
+    WebhooksRequest:
+      title: WebhooksRequest
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              description: 返回的业务数据
+              properties:
+                updatedAt:
+                  type: string
+                  description: '订单完成的时间，遵循[rfc3339](https://datatracker.ietf.org/doc/html/rfc3339)标准格式，格式为yyyy-MM-DDTHH:mm:ssSSS+TIMEZONE，yyyy-MM-DD表示年月日，T出现在字符串中，表示time元素的开头，HH:mm:ss表示时分秒，TIMEZONE表示时区（+08:00表示东八区时间，领先UTC 8小时，即北京时间）。例如：2015-05-20T13:29:35.262+08:00表示，北京时间2015年5月20日13点29分35秒。'
+                  format: date-time
+                  examples:
+                    - '2024-07-18T17:19:59.74+08:00'
+                currency:
+                  type: string
+                  description: '订单币种[ISO4217](https://www.iso.org/standard/46121.html)币种的字母码 eg. USD, CNY, EUR'
+                  examples:
+                    - USD
+                merchantId:
+                  type: string
+                  description: 商户号
+                  examples:
+                    - '2023010558663764'
+                merchantOrderId:
+                  type: string
+                  description: 商户订单号
+                  examples:
+                    - '20230424141154'
+                amount:
+                  type: string
+                  description: 订单金额
+                  examples:
+                    - '100.01'
+                orderId:
+                  type: string
+                  description: 订单ID
+                  examples:
+                    - TR1648561479508692992
+                payMethod:
+                  type: string
+                  description: 支付方式
+                  examples:
+                    - WEIXIN
+                status:
+                  type: string
+                  enum:
+                    - SUCCESS
+                    - FAIL
+                    - PENDDING
+                  description: 状态
+                  examples:
+                    - SUCCESS
+                bankType:
+                  type: string
+                  enum:
+                    - WPCN
+                    - WPHK
+                  description: '<span style="color:red">注意只有微信支付会返回</span>'
+              required:
+                - updatedAt
+                - currency
+                - merchantId
+                - merchantOrderId
+                - amount
+                - orderId
+                - payMethod
+                - status
+            createdAt:
+              type: string
+              description: '商户订单的时间，遵循[rfc3339](https://datatracker.ietf.org/doc/html/rfc3339)标准格式，格式为yyyy-MM-DDTHH:mm:ssSSS+TIMEZONE，yyyy-MM-DD表示年月日，T出现在字符串中，表示time元素的开头，HH:mm:ss表示时分秒，TIMEZONE表示时区（+08:00表示东八区时间，领先UTC 8小时，即北京时间）。例如：2015-05-20T13:29:35.262+08:00表示，北京时间2015年5月20日13点29分35秒。'
+              format: date-time
+              examples:
+                - '2024-07-18T17:19:59.74+08:00'
+            name:
+              type: string
+              enum:
+                - payment_intent.succeeded
+                - payment_intent.pending
+                - payment_intent.failed
+              description: 事件名称
+              examples:
+                - payment_intent.succeeded
+    WebhooksResponse:
+      type: object
+      title: WebhooksResponse
+      properties:
+        errCode:
+          type: string
+          description: 响应状态码
+          examples:
+            - '00000000'
+        errMessage:
+          type: string
+          description: "错误消息\t"
+          examples:
+            - 成功
+      required:
+        - errCode
+        - errMessage
+    IssuingTransactionSucceededWebhooks:
+      type: object
+      properties:
+        account_id:
+          type: string
+          description: 商户号
+          examples:
+            - acct_pIlscIfSOmirDp2SWk-vcQ
+        created_at:
+          type: string
+          description: '创建时间，符合rfc3339规范，格式：yyyy-MM-dd''T''HH:mm:ss.SSSXXX '
+          examples:
+            - '2024-05-24T14:29:32.682+08:00'
+        data:
+          type: object
+          properties:
+            acquiring_institution_identifier:
+              type: string
+              description: 收单机构唯一标识符
+              examples:
+                - '1234567890'
+            auth_code:
+              type: string
+              description: 授权码
+              examples:
+                - '000001'
+            billing_amount:
+              type: number
+              description: 账单金额
+              examples:
+                - 100
+            billing_currency:
+              type: string
+              description: 结算币种
+              examples:
+                - USD
+            card_id:
+              type: string
+              description: 卡的唯一标识符
+              examples:
+                - 7f687fe6-dcf4-4462-92fa-80335301d9d2
+            card_nickname:
+              type: string
+              description: 卡的昵称
+              examples:
+                - Willing
+            client_data:
+              type:
+                - string
+                - 'null'
+              description: 客户数据
+            failure_reason:
+              type: string
+              description: 此交易失败的原因（如果状态为失败）。
+            lifecycle_id:
+              type: string
+              description: 用于将属于同一张卡付款的多个相关交易（例如授权、撤销、捕获和退款）关联到单个交易生命周期内的标识符。注意：对于 2025 年 1 月之前创建的交易，此字段为空
+            masked_card_number:
+              type: string
+              description: 脱敏卡号
+              examples:
+                - '************4242'
+            matched_authorizations:
+              type: array
+              description: 用于匹配捕获和撤销的授权 ID 列表，用于将捕获和撤销与其对应的授权进行匹配。此列表仅适用于 2022 年 5 月 1 日之后的授权。
+              items:
+                type: string
+                examples:
+                  - 6c2dc266-09ad-4235-b61a-767c7cd6d6ea
+            merchant:
+              type: object
+              description: 卡交易的商户
+              properties:
+                category_code:
+                  type: string
+                  description: 商户类别代码
+                  examples:
+                    - '4829'
+                city:
+                  type: string
+                  description: 商户城市
+                  examples:
+                    - San Francisco
+                country:
+                  type: string
+                  description: 商户所在国家/地区。注意：此字段可能以某些国家/地区的州名作为前缀，例如 TXUSA，您需要解析最后 3 个字符以获取国家/地区代码。
+                identifier:
+                  type: string
+                  description: 商户唯一标识符
+                  examples:
+                    - '012345678910123'
+                name:
+                  type: string
+                  description: 商户名称
+                  examples:
+                    - Merchant B
+              required:
+                - category_code
+                - name
+            network_transaction_id:
+              type: string
+              description: VISA网络的交易ID
+              examples:
+                - '3951729271768745'
+            posted_date:
+              type: string
+              description: 交易请求日期
+              examples:
+                - '2018-03-22T16:08:02+00:00'
+            retrieval_ref:
+              type: string
+              description: '交易检索参考编号。金融交易报文的数据元素 37 [(https://en.wikipedia.org/wiki/ISO_8583)](url)'
+            status:
+              type: string
+              enum:
+                - APPROVED
+                - CLEARED
+                - EXPIRED
+                - FAILED
+                - PENDING
+                - REVERSED
+              description: '此交易的状态。可以是以下之一：APPROVED, CLEARED, EXPIRED, FAILED, PENDING, REVERSED'
+              examples:
+                - APPROVED
+            transaction_amount:
+              type: number
+              description: 交易金额
+              examples:
+                - 100
+            transaction_currency:
+              type: string
+              description: 交易币种
+              examples:
+                - USD
+            transaction_date:
+              type: string
+              description: 交易日期
+              examples:
+                - '2018-03-21T16:08:02+00:00'
+            transaction_id:
+              type: string
+              description: 此授权的唯一 ID，即 uuid
+              examples:
+                - 6c2dc266-09ad-4235-b61a-767c7cd6d6ea
+            transaction_type:
+              type: string
+              enum:
+                - AUTHORIZATION
+                - CLEARING
+                - REFUND
+                - REVERSAL
+                - ORIGINAL_CREDIT
+              description: 交易类型 - AUTHORIZATION、CLEARING、REFUND、REVERSAL、ORIGINAL_CREDIT 之一
+          required:
+            - billing_amount
+            - billing_currency
+            - card_id
+            - masked_card_number
+            - merchant
+            - status
+            - transaction_amount
+            - transaction_currency
+            - transaction_id
+            - transaction_type
+        id:
+          type: string
+          description: 交易的唯一标识符
+          examples:
+            - 6c2dc266-09ad-4235-b61a-767c7cd6d6ea
+        name:
+          type: string
+          description: 消息订阅名称
+          examples:
+            - issuing.transaction.succeeded
+        version:
+          type: string
+          description: 版本
+          examples:
+            - '2019-09-09'
+      required:
+        - account_id
+        - created_at
+        - id
+        - name
+        - version
+      x-examples:
+        Example 1:
+          account_id: acct_pIlscIfSOmirDp2SWk-vcQ
+          created_at: '2022-06-08T10:40:39+0000'
+          data:
+            acquiring_institution_identifier: '123456'
+            auth_code: ABC123
+            billing_amount: -100
+            billing_currency: USD
+            card_id: 7f687fe6-dcf4-4462-92fa-80335301d9d2
+            card_nickname: Recurring payments
+            client_data: null
+            failure_reason: null
+            lifecycle_id: 95ede192-3a86-461e-96d9-f51b55aae79e
+            masked_card_number: '************4242'
+            matched_authorizations:
+              - 6c2dc266-09ad-4235-b61a-767c7cd6d6ea
+            merchant:
+              category_code: '4829'
+              city: Melbourne
+              country: Australia
+              identifier: '012345678910123'
+              name: Merchant A
+            network_transaction_id: '3951729271768745'
+            posted_date: '2022-03-22T16:08:03.000+0000'
+            retrieval_ref: '909916088001'
+            status: APPROVED
+            transaction_amount: -100
+            transaction_currency: USD
+            transaction_date: '2022-03-21T16:08:03.000+0000'
+            transaction_id: 1ba6b405-9d89-4a65-8713-14fdbcd1bc9b
+            transaction_type: CLEARING
+          id: 1ba6b405-9d89-4a65-8713-14fdbcd1bc9b
+          name: issuing.transaction.succeeded
+          version: '2019-09-09'
+    IssuingTransactionFailedWebhooks:
+      type: object
+      properties:
+        account_id:
+          type: string
+          description: 商户号
+          examples:
+            - acct_pIlscIfSOmirDp2SWk-vcQ
+        created_at:
+          type: string
+          description: '创建时间，符合rfc3339规范，格式：yyyy-MM-dd''T''HH:mm:ss.SSSXXX '
+          examples:
+            - '2024-05-24T14:29:32.682+08:00'
+        data:
+          type: object
+          properties:
+            acquiring_institution_identifier:
+              type: string
+              description: 收单机构唯一标识符
+              examples:
+                - '1234567890'
+            auth_code:
+              type: string
+              description: 授权码
+              examples:
+                - '000001'
+            billing_amount:
+              type: number
+              description: 账单金额
+              examples:
+                - 100
+            billing_currency:
+              type: string
+              description: 结算币种
+              examples:
+                - USD
+            card_id:
+              type: string
+              description: 卡的唯一标识符
+              examples:
+                - 7f687fe6-dcf4-4462-92fa-80335301d9d2
+            card_nickname:
+              type: string
+              description: 卡的昵称
+              examples:
+                - Willing
+            client_data:
+              type:
+                - string
+                - 'null'
+              description: 客户数据
+            failure_reason:
+              type: string
+              description: 此交易失败的原因（如果状态为失败）。
+            lifecycle_id:
+              type: string
+              description: 用于将属于同一张卡付款的多个相关交易（例如授权、撤销、捕获和退款）关联到单个交易生命周期内的标识符。注意：对于 2025 年 1 月之前创建的交易，此字段为空
+            masked_card_number:
+              type: string
+              description: 脱敏卡号
+              examples:
+                - '************4242'
+            matched_authorizations:
+              type: array
+              description: 用于匹配捕获和撤销的授权 ID 列表，用于将捕获和撤销与其对应的授权进行匹配。此列表仅适用于 2022 年 5 月 1 日之后的授权。
+              items:
+                type: string
+                examples:
+                  - 6c2dc266-09ad-4235-b61a-767c7cd6d6ea
+            merchant:
+              type: object
+              description: 卡交易的商户
+              properties:
+                category_code:
+                  type: string
+                  description: 商户类别代码
+                  examples:
+                    - '4829'
+                city:
+                  type: string
+                  description: 商户城市
+                  examples:
+                    - San Francisco
+                country:
+                  type: string
+                  description: 商户所在国家/地区。注意：此字段可能以某些国家/地区的州名作为前缀，例如 TXUSA，您需要解析最后 3 个字符以获取国家/地区代码。
+                identifier:
+                  type: string
+                  description: 商户唯一标识符
+                  examples:
+                    - '012345678910123'
+                name:
+                  type: string
+                  description: 商户名称
+                  examples:
+                    - Merchant B
+              required:
+                - category_code
+                - name
+            network_transaction_id:
+              type: string
+              description: VISA网络的交易ID
+              examples:
+                - '3951729271768745'
+            posted_date:
+              type: string
+              description: 交易请求日期
+              examples:
+                - '2018-03-22T16:08:02+00:00'
+            retrieval_ref:
+              type: string
+              description: '交易检索参考编号。金融交易报文的数据元素 37 [(https://en.wikipedia.org/wiki/ISO_8583)](url)'
+            status:
+              type: string
+              enum:
+                - APPROVED
+                - CLEARED
+                - EXPIRED
+                - FAILED
+                - PENDING
+                - REVERSED
+              description: '此交易的状态。可以是以下之一：APPROVED, CLEARED, EXPIRED, FAILED, PENDING, REVERSED'
+              examples:
+                - FAILED
+            transaction_amount:
+              type: number
+              description: 交易金额
+              examples:
+                - 100
+            transaction_currency:
+              type: string
+              description: 交易币种
+              examples:
+                - USD
+            transaction_date:
+              type: string
+              description: 交易日期
+              examples:
+                - '2018-03-21T16:08:02+00:00'
+            transaction_id:
+              type: string
+              description: 此授权的唯一 ID，即 uuid
+              examples:
+                - 6c2dc266-09ad-4235-b61a-767c7cd6d6ea
+            transaction_type:
+              type: string
+              enum:
+                - AUTHORIZATION
+                - CLEARING
+                - REFUND
+                - REVERSAL
+                - ORIGINAL_CREDIT
+              description: 交易类型 - AUTHORIZATION、CLEARING、REFUND、REVERSAL、ORIGINAL_CREDIT 之一
+          required:
+            - billing_amount
+            - billing_currency
+            - card_id
+            - masked_card_number
+            - merchant
+            - status
+            - transaction_amount
+            - transaction_currency
+            - transaction_id
+            - transaction_type
+        id:
+          type: string
+          description: 交易的唯一标识符
+          examples:
+            - 6c2dc266-09ad-4235-b61a-767c7cd6d6ea
+        name:
+          type: string
+          description: 消息订阅名称
+          examples:
+            - issuing.transaction.failed
+        version:
+          type: string
+          description: 版本
+          examples:
+            - '2019-09-09'
+      required:
+        - account_id
+        - created_at
+        - id
+        - name
+        - version
+      x-examples:
+        Example 1:
+          account_id: acct_pIlscIfSOmirDp2SWk-vcQ
+          created_at: '2022-06-08T10:40:39+0000'
+          data:
+            acquiring_institution_identifier: '123456'
+            auth_code: ABC123
+            billing_amount: -100
+            billing_currency: USD
+            card_id: 7f687fe6-dcf4-4462-92fa-80335301d9d2
+            card_nickname: Recurring payments
+            client_data: null
+            failure_reason: null
+            lifecycle_id: 95ede192-3a86-461e-96d9-f51b55aae79e
+            masked_card_number: '************4242'
+            matched_authorizations:
+              - 6c2dc266-09ad-4235-b61a-767c7cd6d6ea
+            merchant:
+              category_code: '4829'
+              city: Melbourne
+              country: Australia
+              identifier: '012345678910123'
+              name: Merchant A
+            network_transaction_id: '3951729271768745'
+            posted_date: '2022-03-22T16:08:03.000+0000'
+            retrieval_ref: '909916088001'
+            status: APPROVED
+            transaction_amount: -100
+            transaction_currency: USD
+            transaction_date: '2022-03-21T16:08:03.000+0000'
+            transaction_id: 1ba6b405-9d89-4a65-8713-14fdbcd1bc9b
+            transaction_type: CLEARING
+          id: 1ba6b405-9d89-4a65-8713-14fdbcd1bc9b
+          name: issuing.transaction.succeeded
+          version: '2019-09-09'
+security:
+  - signature: []
+x-internal: false
+x-tagGroups:
+  - name: 开始
+    tags:
+      - PAYS
+      - 版本管理
+      - 授权
+      - 加签
+  - name: 收单
+    tags:
+      - 端到端支付
+      - 收银台
+      - 其他交易类型
+      - 附录
+  - name: 收款
+    tags:
+      - 店铺管理
+      - 还原申报订单上传
+      - 全球账户
+      - 入账凭证
+      - 全球账户附录
+  - name: 发卡
+    tags:
+      - 卡管理
+      - 充值卡管理
+      - 用卡人
+      - 交易明细
+      - 测试
+      - 发卡附录
+  - name: 钱包
+    tags:
+      - 钱包信息查询
+      - 收款人
+      - 付款
+      - 换汇
+      - 钱包附录
+  - name: Matrix
+    tags:
+      - 账户
+      - 转账
+      - 发卡
+      - 连接会员
+      - Matrix附录
+  - name: 协议
+    tags:
+      - 续签
+  - name: 其它
+    tags:
+      - 文件
+  - name: 通知订阅
+    tags:
+      - Webhook 管理
+      - SFTP 管理
+      - 通知
+  - name: 附录
+    tags:
+      - 总附录
+  - name: 更新日志
+    tags:
+      - 更新日志
+  - name: 支持
+    tags:
+      - 支持
