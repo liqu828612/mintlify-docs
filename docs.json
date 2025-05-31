@@ -34,6 +34,43 @@
           }
         ]
       },
+        {
+        "tab": "Developers",
+        "groups": [
+          {
+            "group": "开发者指南",
+            "pages": [
+              "developers/index",
+              "developers/brief-intro",
+              "developers/config-settings",
+              {
+                "group": "公共参数",
+                "pages": [
+                  "developers/public-body/request",
+                  "developers/public-body/response"
+                ]
+              },
+               "developers/sign-tool"
+
+            ]
+          },
+          {
+            "group": "异步通知",
+            "pages": [
+              "webhooks/callback",
+              "webhooks/signature"
+            ]
+          },
+             {
+            "group": "附录",
+            "pages": [
+              "appendix/return-code",
+              "appendix/front-notify",
+              "appendix/upload-sign"
+            ]
+          }
+        ]
+      },
       {
         "tab": "API Reference",
         "groups": [
@@ -47,7 +84,7 @@
             "group": "收单",
             "pages": [
               {
-                "group": "端到端支付",
+                "group": "支付",
                 "pages": [
                   "api-reference/收单/消费",
                   "api-reference/收单/预授权",
@@ -84,9 +121,11 @@
           },
           {
             "group": "发卡",
+            "tag": "NEW",
             "pages": [
               {
                 "group": "用卡人",
+   
                 "pages": [
                   "api-reference/用卡人/添加用卡人",
                   "api-reference/用卡人/用卡人查询",
@@ -147,33 +186,6 @@
                 ]
               }
             ]
-          },
-          {
-            "group": "Payments",
-            "pages": [
-              "api-reference/payments/payments--create-intent",
-              "api-reference/payments/payments--get-intent",
-              "api-reference/payments/payments--update-intent",
-              "api-reference/payments/payments--session-token",
-              "api-reference/payments/payments--payment-methods-list",
-              "api-reference/payments/payments--confirm-intent",
-              "api-reference/payments/payments--get",
-              "api-reference/payments/payments--create-and-confirm-intent",
-              "api-reference/payments/payments--list"
-            ]
-          },
-          {
-            "group": "Payment Methods",
-            "pages": [
-              "api-reference/payment-methods/payment-method--create",
-              "api-reference/payment-methods/payment-method--create-intent",
-              "api-reference/payment-methods/payment-method--payment-methods-list",
-              "api-reference/payment-methods/payment-method--confirm-intent",
-              "api-reference/payment-methods/payment-method--update",
-              "api-reference/payment-methods/payment-method--retrieve",
-              "api-reference/payment-methods/payment-method--delete",
-              "api-reference/payment-methods/list-saved-payment-methods-for-a-customer"
-            ]
           }
         ]
       }
@@ -206,20 +218,20 @@
     "links": [
       {
         "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "href": "mailto:support@payhui.com"
       }
     ],
     "primary": {
       "type": "button",
       "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "href": "https://global.payhui.com"
     }
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "x": "https://x.com/payhui",
+      "github": "https://github.com/payhui",
+      "linkedin": "https://linkedin.com/company/payhui"
     }
   },
   "openapi": [

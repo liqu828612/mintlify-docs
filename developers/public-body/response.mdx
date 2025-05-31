@@ -1,0 +1,66 @@
+---
+title: 返回参数
+description: "Welcome to the home of your new documentation"
+---
+
+# 返回参数
+* 更新时间：2022-01-16 21:31:02
+## 开放平台公共响应参数
+| 参数 | 类型 | 名称 | 示例值 | 是否必须 |
+| :-----| :---- | :---- | :---- | :---- |
+|errCode |string | 响应状态码，errCode为00000000表示响应成功，其他状态码表示响应失败。具体系统错误码可以参考系统错误码。| 00000000| 必须|
+|errMessage |string | 错误消息| 参数错误| 必须|
+|traceId |string | 请求消息唯一标识。traceId为本次调用产生的流水号，接口调用异常，可以提供此流水号用于排查问题。| 7457794513993866186| 必须|
+|data |Object | 业务数据，为Json对象，如果请求错误，该字段可能会展示错误的详细信息。| {}| 必须|
+|isSuccess |boolean | 是否成功| true| 必须|
+|status |string | 订单状态(见补充说明)| SUCCESS| 必须|
+
+#### 补充说明
+:::tip
+
+status表示订单状态,支付、退款和撤销的订单成功与否以status的值为准。
+:::
+:::tip
+
+status有四种情况 PENDING、SUCCESS、FAIL、CLOSE,分别表示 处理中、成功、失败、订单关闭。
+:::
+## 响应格式
+
+:::tip
+所有接口响应Content-Type均为：application/json，即响应均为json格式。接口响应有统一的格式：
+:::
+
+* 
+### 成功格式
+```json
+{
+  "isSuccess": true,
+  "errCode": "00000003",
+  "errMessage": "Pending",
+  "status": "PENDING",
+  "traceId": "cfef69feec8d25aa",
+  "data": null
+}
+```
+1) 主动扫码支付是异步的，errCode为00000003表示业务请求成功待用户支付，该笔订单显示为"PENDING"状态，用户支付结果可以通过手动查询交易订单获取。
+2) 微信中的被扫支付(MICROPAY)，若用户支付成功，则直接返回状态"SUCCESS"。若遇到网络异常或者用户支付时间过长等，则返回状态为"PENDING"，可以通过查询接口查询交易结果。
+3) 接口请求成功时data字段表示接口响应的业务数据。
+### 失败格式
+```json
+{
+  "isSuccess": false,
+  "errCode": "22070030",
+  "errMessage": "Format error-transType cannot be empty",
+  "status": "FAIL",
+  "traceId": "174d6e0d78675e0c",
+  "data": null
+}
+```
+* errCode定义参见4，<a href = "doc.html#/2.0.0-mdtag5fb63-omd/document-10bc7a68c899d3f5916c0c7686a530da">错误码</a>定义。errMessage字段为错误描述信息。
+* traceId为本次调用产生的流水号，接口调用异常，可以提供此流水号用于排查问题。
+
+
+## 常见错误FAQ
+| 问题 | 回复 |
+| :-----| :---- | 
+|请求提醒缺少系统参数。 |检查系统参数是否正确。对于Post请求所有参数都放在Body里！不可以放在Query里。 | 

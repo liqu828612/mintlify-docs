@@ -1,0 +1,40 @@
+---
+title: 接口说明   
+description: "Welcome to the home of your new documentation"
+---
+
+# 接口说明
+* 更新时间：2022-01-16 21:31:02
+
+## 通讯协议
+商户接入PayerMax 服务，调用API须遵循以下规则：
+
+| 类型	      | 说明 |
+|-----------|-----|
+| 传输方式	  | 为保证交易安全性，采用HTTPS传输，且TLS版本不低于1.2，详情参考 TLS升级说明  |
+| 提交方式	| 采用POST方法提交  | 
+| 数据格式	 | 提交和返回数据都为application/json格式 |
+| 字符编码	| 统一采用UTF-8字符编码 |
+| 签名算法	| SHA256WithRSA | 
+| 签名要求	| 请求和接收数据均需要校验签名，详细方法请参考 配置与签名 | 
+| 判断逻辑	| 先判断协议字段返回，再判断业务返回，最后判断交易状态 |
+
+## 接口结构
+
+如下是调用PayHui接口的http结构，接口名称放到请求地址后面，data里边的内容为不同业务结构拼接而成的报文
+```json
+POST https://gate-uat.payhui.com/gateway/api/gateway/{接口名称}
+Content-Type: application/json
+Content-Length: 580
+sign: 根据请求body使用merchant privateKey签名
+
+{
+    "version": "1.1",
+    "keyVersion": "1",
+    "requestTime": "2022-01-17T08:04:13.879+00:00",
+    "appId": "3b242b56a8b64274bcc37dac281120e3",
+    "merchantNo": "020213827212251",
+    "data": {
+    }
+}
+```

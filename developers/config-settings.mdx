@@ -1,0 +1,254 @@
+---
+title: 配置与签名   
+description: "Welcome to the home of your new documentation"
+---
+
+# 配置与签名
+* 更新时间：2023-01-16 21:31:02
+
+## 获取商户自助平台账号
+
+合作确认后，PayHui 将根据《商户接入申请表》中所填写的“管理员账号信息”，创建可供商户登录商户管理自助平台的管理员账号。 届时，请注意查收 PayHui 下发的激活邮件，接入方可根据邮件指引激活管理员账号。 首次登录需要设置密码，请确保密码安全，以防外泄。
+
+## 获取商户Id和秘钥
+联调接入所需的商户Id，可通过商户管理平台获取。 签名使用的是SHA256WithRSA签名算法，需要商户自行生成公私钥信息，并将公钥通过商户管理平台上传，同时下载PayHui的公钥。请妥善保管密钥信息，若不慎泄漏密钥，请及时更新密钥。
+
+配置入口为：「商户管理平台」-「设置服务」-「开发参数」频道。
+:::tip
+
+商户appId和密钥是配套的，需要区分测试环境与正式环境。
+
+:::
+
+## 配置异步通知地址
+
+回调地址用于接入方服务端接收来自 PayHui 服务端提供的订单异步回调结果。 该地址可通过调用接口的对应参数提交，也可通过商户管理平台设置。 其中，接口提交的回调地址优先于商户管理平台内的设置入口:「商户管理平台」-「设置服务」-「开发参数」 频道。
+
+:::tip
+
+第四步商户公钥也是在该处配置。
+
+:::
+
+## 公钥和私钥配置
+### 公钥和私钥的作用
+```mermaid
+sequenceDiagram
+    商户->>平台: 私钥对body进行签名，请求发送平台
+    平台-->平台: 平台会用商户公钥进行验签
+    平台-->>商户: 平台会使用私钥进行签名
+    商户-->商户: 商户使用平台提供的公钥进行验签
+    商户-)平台: See you later!
+
+```
+### 如何生成公钥私钥
+
+商户公私钥可通过如下三种方式进行生成（任选其一即可），生成的商户私钥请商户自己妥善保管，用于请求PayHui报文的加签操作，商户公钥通过Merchant Dashboard平台上传给PayHui用于验证商户签名防止报文在网络传输过程中被篡改，同时在平台上获取PayHui公钥放到自己程序中，用于验证PayHui加签报文的签名。
+#### 在线生成密钥对
+通过PayHui提供的开发者工具，在线生成密钥对，工具为纯js实现不会和PayHui服务器进行交互，不会泄露商户密钥信息。 生成地址
+#### SDK生成
+SDK提供了开发相关工具类中的createKeyPair方法或者函数也可以生成。 Java SDK | Php SDK
+
+```java
+import java.security.*;
+
+public class GenerateRSAKeyPair {
+    public static void main(String[] args) throws NoSuchAlgorithmException {
+        // Generate an RSA key pair
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+        keyPairGenerator.initialize(2048); // You can change the key size as needed (2048 bits is recommended)
+        KeyPair keyPair = keyPairGenerator.generateKeyPair();
+
+        // Get the public and private keys
+        PublicKey publicKey = keyPair.getPublic();
+        PrivateKey privateKey = keyPair.getPrivate();
+
+        // Print the keys (just for demonstration)
+        System.out.println("RSA Public Key:");
+        System.out.println(Base64.getEncoder().encodeToString(publicKey.getEncoded()));
+        System.out.println("\nRSA Private Key:");
+        System.out.println(Base64.getEncoder().encodeToString(privateKey.getEncoded()));
+    }
+}
+
+
+```
+
+#### openssl生成
+
+通过openssl命令生成pem公私钥文件并手动去除开头、结尾、换行符得到公私钥信息。
+
+下载并安装openssl，参考文档：https://www.openssl.org/source/ 执行如下命令：
+
+
+
+```sh
+#私钥
+openssl genrsa 2048 | openssl pkcs8 -topk8 -nocrypt -out private.key.pem
+#公钥
+openssl rsa -in private.key.pem -pubout > public.key.pem
+
+```
+
+执行完上述命令后，会生成两个文件内容如下（示例）：
+
+公钥文件public.key.pem：
+
+```text
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzN6tx98b4KZB1uqEuT7P
+/nWHrYqFdiy+Kzs9KZ6JtSQWb3b45loOsdUxFeaCAt+ZJ0+fNJRDnwc7AiKOlgbw
+0HT93WRVZXP6cwQV1Bg1XybBxtQE4OcEq+Uzzmd7RoBkQuNmjIUgDYtWPBSekSpZ
+AhWkk4dh8Nd7Qv2BvJNNOISVFcROFgMgbGz80v6WofR4nnTEdTB+j4pR/Q4dhnIR
+OlaWrai+hBPn95sahQ+Ujf7LZgLyhpyQeS+/xsLv29lDI6D+8neR1tsOYdOp8f8Q
+NwDkOroMlzxkQeYsJDLpLG8p58zHSdcLOsopVe2u41uzdrQ8qjhw4FU9eBOmFite
+iwIDAQAB
+-----END PUBLIC KEY-----
+
+```
+私钥文件private.key.pem：
+
+```text
+-----BEGIN PRIVATE KEY-----
+MIIEwAIBADANBgkqhkiG9w0BAQEFAASCBKowggSmAgEAAoIBAQDM3q3H3xvgpkHW
+6oS5Ps/+dYetioV2LL4rOz0pnom1JBZvdvjmWg6x1TEV5oIC35knT580lEOfBzsC
+Io6WBvDQdP3dZFVlc/pzBBXUGDVfJsHG1ATg5wSr5TPOZ3tGgGRC42aMhSANi1Y8
+FJ6RKlkCFaSTh2Hw13tC/YG8k004hJUVxE4WAyBsbPzS/pah9HiedMR1MH6PilH9
+Dh2GchE6VpatqL6EE+f3mxqFD5SN/stmAvKGnJB5L7/Gwu/b2UMjoP7yd5HW2w5h
+06nx/xA3AOQ6ugyXPGRB5iwkMuksbynnzMdJ1ws6yilV7a7jW7N2tDyqOHDgVT14
+E6YWK16LAgMBAAECggEBAKFLC8yZdixHGPzohHgH4N94jsptjae9kDcfG4dB3y8y
+60r0gv9wlbMiotOYOHGkssKFaFWQCTESEz4aEOJDMqMcCKaeELGgPuUAqWLjcFmq
+fNNaJ0EeAMqI2GG/jQmzmbwjpqApS1P+iHUi0rh9e7gta/YOl2hzbgMO7W6XFivQ
+pMIQZQE0WpmpK8cNgev/Xog8ZnHFC6XGUgK+mDVvJMYwmywUPIfLw2fvAZ29Qogt
+qiGeFCJSwAL1VkxryXSjJJBKuoc3cXEcq/hjhz6G9rvd50Lj2kCWMd8iqm/dtFyh
+DnT5WSFYNPIH0Up9qtqeP+TqgI/SrztAVHgUXVB2ABkCgYEA9cSeHG04Pj3p9ZCe
+Cc6qb6L2kFphb62BhmUSHZ50p6X1KsSMw4wnzbrgrvcSe97iWZNLC536eQVHE5gL
+4ZjIxylYkp+FuuPHMIDseASR2pNmY2sJ83iTB4C9Y+37+64wBceFiXWBERdJA1t2
+MnzWLR8ijFfmHQ4KX3DJOhR05qUCgYEA1WYroahttPyvMFHdmcCphF9jhF3U6SGu
+VndwTtqaGLHzCmSvHxLFyd8ziw/F344IGIn8fIbOqhFAijyliD53kGMiKSUqMH4Q
+eP2RfxGrZqek3f6pvyUtxfjXAh6+7pfL46u0AzmyvcpaGXqQToecCF43MCdbxh7Z
+3CViGfBcWW8CgYEAvJRcufU4ddHuJoYMLfxNHRIPXV5sa1PYEjaVevKuEkGuaF2e
+oSF3HU4qvzZIEZJJXnA94jEbEydwjWFapIUmcmOQWhlbdLb4jYgvajwfanc11k04
+uoAnWVd4eygN9OWIZbbeCUaHfYS/ensAq+bMNJ0yVjvQDzVJ0kfpr84okR0CgYEA
+mBroNKTx9ZQ6Zu2jT2lVKuY27+1VygpY0ob1xS7psXp9asYTUMm3s0ll2tQWTV9W
+g+8uya/o9K2xXBcYQgGMhZ0zhzJXXRMuOJ88qt70VgpeaGGRqo4cj0TsNDWoEDag
+fJoxiC8DKWZnTEvhOihM3mYRXkBfmNr6nIEE6Mo7eP8CgYEA8KqzIk+5On3xmeES
+fQcLPYiaO9Hlttc7flyIpUL52Og7S1T/ekdiBVIDlePpjRx5H0iCtANyWmQq0Xbf
+SseQ9SFJ/4DLvDMawhvolmxHs98PNa8xZ9KdXgUNc7RcewUVhK2aLkxUQKNO0lww
+GGDGWfvePWzlVotJd0bM+a/X4qg=
+-----END PRIVATE KEY-----
+
+```
+
+:::warning
+
+注意：PKCS8需要去除开头、结尾、换行。
+
+:::
+
+得到公钥字符串：
+
+```text
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzN6tx98b4KZB1uqEuT7P/nWHrYqFdiy+Kzs9KZ6JtSQWb3b45loOsdUxFeaCAt+ZJ0+fNJRDnwc7AiKOlgbw0HT93WRVZXP6cwQV1Bg1XybBxtQE4OcEq+Uzzmd7RoBkQuNmjIUgDYtWPBSekSpZAhWkk4dh8Nd7Qv2BvJNNOISVFcROFgMgbGz80v6WofR4nnTEdTB+j4pR/Q4dhnIROlaWrai+hBPn95sahQ+Ujf7LZgLyhpyQeS+/xsLv29lDI6D+8neR1tsOYdOp8f8QNwDkOroMlzxkQeYsJDLpLG8p58zHSdcLOsopVe2u41uzdrQ8qjhw4FU9eBOmFiteiwIDAQAB
+
+```
+
+得到私钥字符串：
+
+```text
+MIIEwAIBADANBgkqhkiG9w0BAQEFAASCBKowggSmAgEAAoIBAQDM3q3H3xvgpkHW6oS5Ps/+dYetioV2LL4rOz0pnom1JBZvdvjmWg6x1TEV5oIC35knT580lEOfBzsCIo6WBvDQdP3dZFVlc/pzBBXUGDVfJsHG1ATg5wSr5TPOZ3tGgGRC42aMhSANi1Y8FJ6RKlkCFaSTh2Hw13tC/YG8k004hJUVxE4WAyBsbPzS/pah9HiedMR1MH6PilH9Dh2GchE6VpatqL6EE+f3mxqFD5SN/stmAvKGnJB5L7/Gwu/b2UMjoP7yd5HW2w5h06nx/xA3AOQ6ugyXPGRB5iwkMuksbynnzMdJ1ws6yilV7a7jW7N2tDyqOHDgVT14E6YWK16LAgMBAAECggEBAKFLC8yZdixHGPzohHgH4N94jsptjae9kDcfG4dB3y8y60r0gv9wlbMiotOYOHGkssKFaFWQCTESEz4aEOJDMqMcCKaeELGgPuUAqWLjcFmqfNNaJ0EeAMqI2GG/jQmzmbwjpqApS1P+iHUi0rh9e7gta/YOl2hzbgMO7W6XFivQpMIQZQE0WpmpK8cNgev/Xog8ZnHFC6XGUgK+mDVvJMYwmywUPIfLw2fvAZ29QogtqiGeFCJSwAL1VkxryXSjJJBKuoc3cXEcq/hjhz6G9rvd50Lj2kCWMd8iqm/dtFyhDnT5WSFYNPIH0Up9qtqeP+TqgI/SrztAVHgUXVB2ABkCgYEA9cSeHG04Pj3p9ZCeCc6qb6L2kFphb62BhmUSHZ50p6X1KsSMw4wnzbrgrvcSe97iWZNLC536eQVHE5gL4ZjIxylYkp+FuuPHMIDseASR2pNmY2sJ83iTB4C9Y+37+64wBceFiXWBERdJA1t2MnzWLR8ijFfmHQ4KX3DJOhR05qUCgYEA1WYroahttPyvMFHdmcCphF9jhF3U6SGuVndwTtqaGLHzCmSvHxLFyd8ziw/F344IGIn8fIbOqhFAijyliD53kGMiKSUqMH4QeP2RfxGrZqek3f6pvyUtxfjXAh6+7pfL46u0AzmyvcpaGXqQToecCF43MCdbxh7Z3CViGfBcWW8CgYEAvJRcufU4ddHuJoYMLfxNHRIPXV5sa1PYEjaVevKuEkGuaF2eoSF3HU4qvzZIEZJJXnA94jEbEydwjWFapIUmcmOQWhlbdLb4jYgvajwfanc11k04uoAnWVd4eygN9OWIZbbeCUaHfYS/ensAq+bMNJ0yVjvQDzVJ0kfpr84okR0CgYEAmBroNKTx9ZQ6Zu2jT2lVKuY27+1VygpY0ob1xS7psXp9asYTUMm3s0ll2tQWTV9Wg+8uya/o9K2xXBcYQgGMhZ0zhzJXXRMuOJ88qt70VgpeaGGRqo4cj0TsNDWoEDagfJoxiC8DKWZnTEvhOihM3mYRXkBfmNr6nIEE6Mo7eP8CgYEA8KqzIk+5On3xmeESfQcLPYiaO9Hlttc7flyIpUL52Og7S1T/ekdiBVIDlePpjRx5H0iCtANyWmQq0XbfSseQ9SFJ/4DLvDMawhvolmxHs98PNa8xZ9KdXgUNc7RcewUVhK2aLkxUQKNO0lwwGGDGWfvePWzlVotJd0bM+a/X4qg=
+
+```
+:::warning
+
+使用商户私钥进行加签的报文字符串要保证和http body中的字符串是一致的，否则会导致payermx验签不通过。比如下面两个json内容含义一致，但是因为格式化原因导致加签结果是不一致。
+您可以通过开发者【自助加签小工具】体验加签过程。
+
+:::
+
+格式化的json字符串：
+```json
+{
+    "key1":"val1",
+    "key2": "val2",
+    "key3": "val3"
+}
+
+使用示例私钥加签结果：
+"FPFVT3o227JrFRbqu19boZCpVVTF9KznxyRawUmxpfXilHV/0yK46haPhAjNu1hPUMy7Vw/ILXhfzffNm4Fj0apWknlTY9OJxnSoQxS9BTFtc61tn5yV1q69x/kkBl82/qwg+XTJ4fOzy7Mar3VaC1E2PlDA6RkkKBUyNE6RYgsdB+Su7an4+4HVTNAnoe74WyvBgxTLMNg28igBTdqxaO3w/UBY6ObVp7vkqkQGdL1Y+HgmMYaAVwrM3+ALWGId0sJ+YqTY4WJ+0xCRGhaSnybiIjZsQEYyID68WNUfuavDLDsEhaMm/HfQvf5p0R1Ltovp3wwJnEbQcjY458iX5A=="
+
+```
+
+压缩的json字符串：
+
+```json
+{"key1":"val1","key2":"val2","key3":"val3"}
+
+使用示例私钥加签结果：
+"W/unZQUH9366PZDhYlCghA7q66VmPDBN/7OvVKhigQNfLJPxGnbhrH6JV4rYlsyfduPt4QKZalaafvs/tJ+CVOr2RGt3815hcAPB7MN/u4y3W+IfbwTXkT7gWujT652YDfMls2dwRCYun++DSOVFHkP8FUp8/Rb6e8CuKbA40RwfHfUTek24TMq0JmiYZDfRYbMUE30Pm8PXDAStoTTOqjJ+5zVAMWCzUwId1/P3iNWue+DUwCyLEA6tHFIJX8dUoSlbtjRs1p4Q8ahSFg5Dx+RORtLclnp8g38hgWFNsvcSuW3RXTkwIYmmbp5Qguw16af9P8Li82zI4M8TqgI08g=="
+```
+
+###  签名算法
+| 类型	      | 说明 | City       |
+|-----------|-----|------------|
+| 算法  | RSA  | New York   |
+| Key格式 | PKCS8  | San Francisco |
+| 签名算法	 | SHA256WithRSA | Chicago    |
+| 密钥长度	 | 2048 | Chicago    |
+
+### 示例报文
+请求报文
+
+
+```json
+POST https://pay-gate.payhui.com/aggregate-pay/api/gateway/orderAndPay
+Content-Type:application/json
+Content-Length:580
+sign:根据请求body使用merchant privateKey签名
+
+{
+    "version": "1.1",
+    "keyVersion": "1",
+    "requestTime": "2022-01-17T08:04:13.879+00:00",
+    "appId": "3b242b56a8b64274bcc37dac281120e3",
+    "merchantNo": "020213827212251",
+    "data": {
+        "outTradeNo": "Pay1642406653879",
+        "subject": "MacPro14 and Mouse",
+        "totalAmount": "10000",
+        "currency": "IDR",
+        "country": "ID",
+        "userId": "10001",
+        "language": "en",
+        "reference": "020213827524152",
+        "frontCallbackURL": "https://www.payhui.com",
+        "notifyUrl": "https://www.payhui.com"
+    }
+}
+```
+
+响应报文
+
+```json
+POST https://pay-gate.payhui.com/aggregate-pay/api/gateway/orderAndPay
+Content-Type:application/json
+Content-Length:580
+sign:根据请求body使用merchant privateKey签名
+
+HTTP/1.1 200 OK
+Date:Mon, 17 Jan 2022 03:49:08 GMT
+Content-Type:application/json
+Connection:keep-alive
+sign:PayHui签名信息，商户根据响应json body以及PayHui publicKey验签
+
+{
+    "code": "APPLY_SUCCESS",
+    "msg": "",
+    "data": {
+        "redirectUrl": "https://cashier-n.payhui.com/index.html#/cashier/home?merchantId=020213827212251&appId=3b242b56a8b64274bcc37dac281120e3&country=ID&tradeToken=TOKEN20220117080414618354880&language=en&token=LVDNgrtBcAvo0W6Zjhuons2jfZsEJXgFIAFDLf2Tq2I2FkdUhwF%2Fm8lxxmI1%2BVPfbPafUGFbZfTqagFOD3mMOAKm6790AZi7nuoQbG7SWFIyfD7hr0LbAy9TUpJNjm%2Bsxg2O%2FGvFpzpwP3P1JZxA%2BEajse7sQQubFZhFNGK9o9I%3D&amount=10000¤cy=IDR&frontCallbackUrl=https%3A%2F%2Fwww.baidu.com",
+        "outTradeNo": "Pay1642406653879",
+        "tradeToken": "TOKEN20220117080414618354880",
+        "status": "PENDING"
+    }
+}
+```
