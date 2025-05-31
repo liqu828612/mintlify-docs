@@ -16,10 +16,10 @@ PayHui provides a collection of APIs that enable you to process and manage payme
   <Card horizontal title="Refund" href="/api-reference/收单/退款" icon="receipt">
     Process refunds for completed payments using our API
   </Card>
-  <Card horizontal title="Save a payment method" href="api-reference/payment-methods/paymentmethods--create" icon="vault">
+  <Card horizontal title="Save a payment method" href="/api-reference/收单/预授权" icon="vault">
     Save customer payment methods securely for future transactions
   </Card>
-  <Card horizontal title="Self Hosted?" href="api-reference/organization/organization--create" icon="circle-down">
+  <Card horizontal title="Self Hosted?" href="/api-reference/收单/撤销" icon="circle-down">
     Host PayHui on-premise? Utilize our full API suite.
   </Card>
 </CardGroup>
@@ -78,3 +78,40 @@ The available parameters are as follows:
 - **manual_retry_allowed** - whether this payment can be retried or not.
 - **signature** - A HMAC signature of the payload, this can be verified using the `payment_response_hash_key`.
 - **signature_algorithm** - The HMAC algorithm used to calculate the signature.
+## payment methods
+| 支付方式 | 支持国家 | 支付类型 | Tokenization | MIT | 必填参数(端到端支付必填) | 交易币种 |
+| :----: | :----: | :----: | :----: | :----:| :----:| :----: |
+| VISA | 全球 | CREDIT_CARD | ☑️ | ☑️ | cardNo/firstName/lastName/cvv/expireYear/expireMonth | 全币种 |
+| MasterCard | 全球 | CREDIT_CARD | ☑️ | ☑️ | cardNo/firstName/lastName/cvv/expireYear/expireMonth | 全币种 |
+| JCB | 全球 | CREDIT_CARD | ☑️ | ☑️ | cardNo/firstName/lastName/cvv/expireYear/expireMonth | 全币种 |
+| DISCOVER | 全球 | CREDIT_CARD | ☑️ | ☑️ | cardNo/firstName/lastName/cvv/expireYear/expireMonth | 全币种 |
+| UNION_PAY | 全球 | CREDIT_CARD | ☑️ | ☑️ | cardNo/firstName/lastName/cvv/expireYear/expireMonth | 全币种 |
+| WEIXIN | 中国香港(HK) | QRCODE,MICROPAY,JSAPI,MINIPROGRAM,APP,H5\t | - | - | - | CNY,HKD |
+| UNIONPAY | 中国香港(HK) | WEB,PAN_PRESENT,QRCODE,H5,3DS | - | - | - | CNY,HKD |
+| ALIPAY_CN | 中国(CN) | H5,WEB,APP | - | - | - | CNY,USD,HKD|
+| ALIPAY_HK | 中国香港(HK) | H5,WEB,APP | - | - | - | HKD,USD|
+| ALIPAY_HK | 中国香港(HK) | H5,WEB,APP | - | - | - | HKD,USD|
+| GCASH | 菲律宾(PH)| H5,WEB,BILLS | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | PHP,USD |
+| BPI | 菲律宾(PH)| H5,WEB | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | PHP,USD |
+| MAYA | 菲律宾(PH)| H5,WEB | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | PHP |
+| BILLEASE | 菲律宾(PH)| H5,WEB | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | PHP,USD |
+| Dragonpay | 菲律宾(PH)| H5,WEB | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | PHP |
+| GrabPay_PH | 菲律宾(PH)| H5,WEB | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | PHP |
+| TNG | 马来西亚(MY)| H5,WEB | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | MYR,USD |
+| BOOST | 马来西亚(MY)| H5,WEB | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | MYR,USD |
+| GrabPay_MY | 马来西亚(MY)| H5,WEB | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | MYR |
+| DANA | 印度尼西亚(ID)| H5,WEB | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | IDR,USD |
+| KAKAOPAY | 韩国(KR)| H5,WEB | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | KRW,USD |
+| NAVERPAY | 韩国(KR)| H5,WEB | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | KRW,USD |
+| TOSSPAY | 韩国(KR)| H5,WEB | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | KRW,USD |
+| TRUEMONEY | 泰国(TH)| H5,WEB | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | THB,USD |
+| RABBIT_LINE_PAY | 泰国(TH)| H5,WEB | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | THB,USD |
+| BRAZIL_PIX | 巴西(BR)| H5,QRCODE | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | BRL |
+| Ewallet_PicPay | 巴西(BR)| H5,QRCODE | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | BRL |
+| Khipu | 智利(CL)| H5 | - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | CLP |
+| GrabPay_SG | 新加坡(SG)| H5,WEB | - |- | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | SGD,USD |
+| GoPay | 印度尼西亚(ID)| H5,WEB| - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | IDR |
+| OVO | 印度尼西亚(ID)| H5,WEB| - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | IDR |
+| DOKU | 印度尼西亚(ID)| H5,WEB| - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | IDR |
+| Konbini | 日本(JP)| H5,WEB| - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | JPY |
+| PayEasy | 日本(JP)| H5,WEB| - | - | countryCode/terminalType/osType<br/> [terminalType必填(WEB,WAP,APP);<br/> terminalType为WAP/APP时osType必填(IOS,ANDROID)] | JPY |
