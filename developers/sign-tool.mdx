@@ -107,18 +107,18 @@ description: "Welcome to the home of your new documentation"
 ```
 #### 注意：
 
-:::danger
+<Warning>
 
 计算 SHA256withRSA 签名时，需要以 utf-8 的编码转换 byte 流，否则可能导致含中文参数的签名计算不正确
 
-:::
+</Warning>
 
 
   ### 请求示例：
 
 ````http request
 POST /v1/payments/open/api/pay HTTP/1.1
-Host: api-open-cater.chinagapy.com
+Host: api-open-cater.payhui.com
 signature: M+CSWJPVOxHHyT2K85VzGifLx7UrF2LYA/V9ATFQFa75WvCwZ3T0mcBIcptn/s+T/i/X2FElVSpL0S7WMiNU70Lg+DeNtgic+4BfwVGoMhX5Mq0pkrriruArZHI58/5bs1S98SFvjciiBpZnN3xziuwHWRoW6yO3anp1/XKTbVc=
 Content-Type: application/json;charset=utf-8
 

@@ -14,21 +14,21 @@ description: "Welcome to the home of your new documentation"
 联调接入所需的商户Id，可通过商户管理平台获取。 签名使用的是SHA256WithRSA签名算法，需要商户自行生成公私钥信息，并将公钥通过商户管理平台上传，同时下载PayHui的公钥。请妥善保管密钥信息，若不慎泄漏密钥，请及时更新密钥。
 
 配置入口为：「商户管理平台」-「设置服务」-「开发参数」频道。
-:::tip
+<Tip>
 
 商户appId和密钥是配套的，需要区分测试环境与正式环境。
 
-:::
+</Tip>
 
 ## 配置异步通知地址
 
 回调地址用于接入方服务端接收来自 PayHui 服务端提供的订单异步回调结果。 该地址可通过调用接口的对应参数提交，也可通过商户管理平台设置。 其中，接口提交的回调地址优先于商户管理平台内的设置入口:「商户管理平台」-「设置服务」-「开发参数」 频道。
 
-:::tip
+<Tip>
 
 第四步商户公钥也是在该处配置。
 
-:::
+</Tip>
 
 ## 公钥和私钥配置
 ### 公钥和私钥的作用
@@ -140,11 +140,11 @@ GGDGWfvePWzlVotJd0bM+a/X4qg=
 
 ```
 
-:::warning
+<Warning>
 
 注意：PKCS8需要去除开头、结尾、换行。
 
-:::
+</Warning>
 
 得到公钥字符串：
 
@@ -159,12 +159,12 @@ MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzN6tx98b4KZB1uqEuT7P/nWHrYqFdiy+Kzs9
 MIIEwAIBADANBgkqhkiG9w0BAQEFAASCBKowggSmAgEAAoIBAQDM3q3H3xvgpkHW6oS5Ps/+dYetioV2LL4rOz0pnom1JBZvdvjmWg6x1TEV5oIC35knT580lEOfBzsCIo6WBvDQdP3dZFVlc/pzBBXUGDVfJsHG1ATg5wSr5TPOZ3tGgGRC42aMhSANi1Y8FJ6RKlkCFaSTh2Hw13tC/YG8k004hJUVxE4WAyBsbPzS/pah9HiedMR1MH6PilH9Dh2GchE6VpatqL6EE+f3mxqFD5SN/stmAvKGnJB5L7/Gwu/b2UMjoP7yd5HW2w5h06nx/xA3AOQ6ugyXPGRB5iwkMuksbynnzMdJ1ws6yilV7a7jW7N2tDyqOHDgVT14E6YWK16LAgMBAAECggEBAKFLC8yZdixHGPzohHgH4N94jsptjae9kDcfG4dB3y8y60r0gv9wlbMiotOYOHGkssKFaFWQCTESEz4aEOJDMqMcCKaeELGgPuUAqWLjcFmqfNNaJ0EeAMqI2GG/jQmzmbwjpqApS1P+iHUi0rh9e7gta/YOl2hzbgMO7W6XFivQpMIQZQE0WpmpK8cNgev/Xog8ZnHFC6XGUgK+mDVvJMYwmywUPIfLw2fvAZ29QogtqiGeFCJSwAL1VkxryXSjJJBKuoc3cXEcq/hjhz6G9rvd50Lj2kCWMd8iqm/dtFyhDnT5WSFYNPIH0Up9qtqeP+TqgI/SrztAVHgUXVB2ABkCgYEA9cSeHG04Pj3p9ZCeCc6qb6L2kFphb62BhmUSHZ50p6X1KsSMw4wnzbrgrvcSe97iWZNLC536eQVHE5gL4ZjIxylYkp+FuuPHMIDseASR2pNmY2sJ83iTB4C9Y+37+64wBceFiXWBERdJA1t2MnzWLR8ijFfmHQ4KX3DJOhR05qUCgYEA1WYroahttPyvMFHdmcCphF9jhF3U6SGuVndwTtqaGLHzCmSvHxLFyd8ziw/F344IGIn8fIbOqhFAijyliD53kGMiKSUqMH4QeP2RfxGrZqek3f6pvyUtxfjXAh6+7pfL46u0AzmyvcpaGXqQToecCF43MCdbxh7Z3CViGfBcWW8CgYEAvJRcufU4ddHuJoYMLfxNHRIPXV5sa1PYEjaVevKuEkGuaF2eoSF3HU4qvzZIEZJJXnA94jEbEydwjWFapIUmcmOQWhlbdLb4jYgvajwfanc11k04uoAnWVd4eygN9OWIZbbeCUaHfYS/ensAq+bMNJ0yVjvQDzVJ0kfpr84okR0CgYEAmBroNKTx9ZQ6Zu2jT2lVKuY27+1VygpY0ob1xS7psXp9asYTUMm3s0ll2tQWTV9Wg+8uya/o9K2xXBcYQgGMhZ0zhzJXXRMuOJ88qt70VgpeaGGRqo4cj0TsNDWoEDagfJoxiC8DKWZnTEvhOihM3mYRXkBfmNr6nIEE6Mo7eP8CgYEA8KqzIk+5On3xmeESfQcLPYiaO9Hlttc7flyIpUL52Og7S1T/ekdiBVIDlePpjRx5H0iCtANyWmQq0XbfSseQ9SFJ/4DLvDMawhvolmxHs98PNa8xZ9KdXgUNc7RcewUVhK2aLkxUQKNO0lwwGGDGWfvePWzlVotJd0bM+a/X4qg=
 
 ```
-:::warning
+<Warning>
 
-使用商户私钥进行加签的报文字符串要保证和http body中的字符串是一致的，否则会导致payermx验签不通过。比如下面两个json内容含义一致，但是因为格式化原因导致加签结果是不一致。
+使用商户私钥进行加签的报文字符串要保证和http body中的字符串是一致的，否则会导致PayHui验签不通过。比如下面两个json内容含义一致，但是因为格式化原因导致加签结果是不一致。
 您可以通过开发者【自助加签小工具】体验加签过程。
 
-:::
+</Warning>
 
 格式化的json字符串：
 ```json
@@ -189,12 +189,12 @@ MIIEwAIBADANBgkqhkiG9w0BAQEFAASCBKowggSmAgEAAoIBAQDM3q3H3xvgpkHW6oS5Ps/+dYetioV2
 ```
 
 ###  签名算法
-| 类型	      | 说明 | City       |
-|-----------|-----|------------|
-| 算法  | RSA  | New York   |
-| Key格式 | PKCS8  | San Francisco |
-| 签名算法	 | SHA256WithRSA | Chicago    |
-| 密钥长度	 | 2048 | Chicago    |
+| 类型	      | 说明 |
+|-----------|-----|
+| 算法  | RSA  | 
+| Key格式 | PKCS8  | 
+| 签名算法	 | SHA256WithRSA | 
+| 密钥长度	 | 2048 | 
 
 ### 示例报文
 请求报文
