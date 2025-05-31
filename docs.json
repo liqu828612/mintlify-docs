@@ -9,6 +9,7 @@
   },
   "favicon": "/favicon.svg",
   "navigation": {
+    
     "tabs": [
       {
         "tab": "Guides",
@@ -37,19 +38,104 @@
       {
         "tab": "API Reference",
         "groups": [
+   
+    
           {
             "group": "API Documentation",
             "pages": [
               "api-reference/introduction"
             ]
           },
-          {
-            "group": "Endpoint Examples",
+           {
+            "group": "收单",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+          
+              {
+                "group": "端到端支付",
+                "pages": [
+                  "api-reference/收单/消费",
+                  "api-reference/收单/预授权",
+                  "api-reference/收单/交易查询",
+                  "api-reference/收单/撤销",
+                  "api-reference/收单/转账",
+                  "api-reference/收单/退款",
+                  "api-reference/收单/转账查询"
+
+                ]
+              },
+                 {
+                "group": "其它交易类型",
+                "pages": [
+                  "api-reference/其他交易类型/获取微信openid",
+                  "api-reference/其他交易类型/预授权撤销",
+                  "api-reference/其他交易类型/预授权完成"
+                ]
+              },    {
+                "group": "商户管理",
+                "pages": [
+                  "api-reference/商户管理/文件上传",
+                  "api-reference/商户管理/商户注册",
+                  "api-reference/商户管理/查询商户注册状态"
+          
+                ]
+              },
+               {
+                "group": "文件下载",
+                "pages": [
+                  "api-reference/文件下载/文件下载"
+                ]
+              }
+              
+            ]
+          },
+                    {
+            "group": "发卡",
+            "pages": [
+          
+              {
+                "group": "用卡人",
+                "pages": [
+                  "api-reference/卡管理/冻结、解冻",
+                  "api-reference/卡管理/获取敏感信息",
+                  "api-reference/卡管理/卡-bin-查询",
+                  "api-reference/卡管理/卡充值",
+                  "api-reference/卡管理/卡信息查询"
+                ]
+              },
+                 {
+                "group": "卡管理",
+                "pages": [
+                  "api-reference/用卡人/添加用卡人",
+                  "api-reference/用卡人/用卡人查询",
+                  "api-reference/用卡人/用卡人更新",
+                  "api-reference/用卡人/用卡人明细",
+                  "api-reference/用卡人/用卡人删除"
+                ]
+              },    {
+                "group": "卡交易管理",
+                "pages": [
+                  "api-reference/卡交易管理/卡交易明细"
+                ]
+              },
+               {
+                "group": "收件人",
+                "pages": [
+                  "api-reference/收件人/添加收件人",
+                  "api-reference/收件人/收件人查询",
+                  "api-reference/收件人/更新收件人"
+                ]
+              }
+              
+            ]
+          },
+          {
+            "group": "卡管理",
+            "pages": [
+              "api-reference/卡管理/冻结、解冻",
+              "api-reference/卡管理/获取敏感信息",
+              "api-reference/卡管理/卡-bin-查询",
+              "api-reference/卡管理/卡充值",
+              "api-reference/卡管理/卡信息查询"
             ]
           },
             {
@@ -82,6 +168,7 @@
         ]
       }
     ],
+  
     "global": {
       "anchors": [
         {
@@ -102,6 +189,7 @@
       ]
     }
   },
+  
   "logo": {
     "light": "/logo/light.svg",
     "dark": "/logo/dark.svg"
