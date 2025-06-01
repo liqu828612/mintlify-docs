@@ -205,8 +205,5 @@
   },
   "openapi": [
     "openapi_spec.json"
-  ],
-  "integrations": {
-    "frontchat": "f8b9a757b5af4fb89e119b656e307983"
-}
+  ]
 }
