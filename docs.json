@@ -137,11 +137,14 @@
               {
                 "group": "卡管理",
                 "pages": [
-                  "api-reference/卡管理/冻结、解冻",
+                  "api-reference/卡管理/开卡",
+                  "api-reference/卡管理/开卡请求查询",
                   "api-reference/卡管理/获取敏感信息",
                   "api-reference/卡管理/卡-bin-查询",
                   "api-reference/卡管理/卡充值",
-                  "api-reference/卡管理/卡信息查询"
+                  "api-reference/卡管理/卡信息查询",
+                   "api-reference/卡管理/冻结、解冻",
+                  "api-reference/卡管理/销卡"
                 ]
               },
               {
