@@ -49,7 +49,7 @@ paths:
               examples:
                 Example 1:
                   value:
-                    isSuccess: true
+                    success: true
                     errCode: string
                     errMessage: string
                     status: string
@@ -1714,7 +1714,7 @@ components:
           userAgent: string
     PayResponse:
       examples:
-        - isSuccess: true
+        - success: true
           errCode: '00000003'
           errMessage: 处理中
           status: PENDING
@@ -1796,7 +1796,7 @@ components:
                 - transAmt
       x-examples:
         Example 1:
-          isSuccess: true
+          success: true
           errCode: '00000003'
           errMessage: 处理中
           status: PENDING
@@ -1847,7 +1847,7 @@ components:
         - traceId
       x-examples:
         Example 1:
-          isSuccess: true
+          success: true
           errCode: '00000003'
           errMessage: 处理中
           status: PENDING
