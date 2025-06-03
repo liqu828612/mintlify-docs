@@ -201,17 +201,17 @@ MIIEwAIBADANBgkqhkiG9w0BAQEFAASCBKowggSmAgEAAoIBAQDM3q3H3xvgpkHW6oS5Ps/+dYetioV2
 
 
 ```json
-POST https://pay-gate.payhui.com/aggregate-pay/api/gateway/orderAndPay
+POST https://gate.payhui.com/gateway/v1/payments/open/api/pay
 Content-Type:application/json
 Content-Length:580
 sign:根据请求body使用merchant privateKey签名
 
 {
-    "version": "1.1",
-    "keyVersion": "1",
+    "charset": "UTF-8",
+    "version": "2.0.0",
     "requestTime": "2022-01-17T08:04:13.879+00:00",
-    "appId": "3b242b56a8b64274bcc37dac281120e3",
-    "merchantNo": "020213827212251",
+    "memberId": "3b242b56a8b64274bcc37dac281120e3",
+    "merchantId": "020213827212251",
     "data": {
         "outTradeNo": "Pay1642406653879",
         "subject": "MacPro14 and Mouse",
@@ -230,7 +230,7 @@ sign:根据请求body使用merchant privateKey签名
 响应报文
 
 ```json
-POST https://pay-gate.payhui.com/aggregate-pay/api/gateway/orderAndPay
+POST https://gate.payhui.com/gateway/v1/payments/open/api/pay
 Content-Type:application/json
 Content-Length:580
 sign:根据请求body使用merchant privateKey签名
@@ -242,8 +242,8 @@ Connection:keep-alive
 sign:PayHui签名信息，商户根据响应json body以及PayHui publicKey验签
 
 {
-    "code": "APPLY_SUCCESS",
-    "msg": "",
+    "errCode": "00000000",
+    "errMessage": "Success",
     "data": {
         "redirectUrl": "https://cashier-n.payhui.com/index.html#/cashier/home?merchantId=020213827212251&appId=3b242b56a8b64274bcc37dac281120e3&country=ID&tradeToken=TOKEN20220117080414618354880&language=en&token=LVDNgrtBcAvo0W6Zjhuons2jfZsEJXgFIAFDLf2Tq2I2FkdUhwF%2Fm8lxxmI1%2BVPfbPafUGFbZfTqagFOD3mMOAKm6790AZi7nuoQbG7SWFIyfD7hr0LbAy9TUpJNjm%2Bsxg2O%2FGvFpzpwP3P1JZxA%2BEajse7sQQubFZhFNGK9o9I%3D&amount=10000¤cy=IDR&frontCallbackUrl=https%3A%2F%2Fwww.baidu.com",
         "outTradeNo": "Pay1642406653879",
