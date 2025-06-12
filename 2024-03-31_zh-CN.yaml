@@ -49,7 +49,7 @@ paths:
               examples:
                 Example 1:
                   value:
-                    success: true
+                    isSuccess: true
                     errCode: string
                     errMessage: string
                     status: string
@@ -971,8 +971,6 @@ webhooks:
         - 消费通知
       summary: 消费失败通知
       description: '当消费成功后，通过开发者webhook配置，开发平台会发送通知给商户，当接受不成功或者发送失败时, 会重发8次, 时间间隔为5s,20s,1m,5m,30m,2h,24h'
-
-
       requestBody:
         content:
           application/json:
@@ -1714,7 +1712,7 @@ components:
           userAgent: string
     PayResponse:
       examples:
-        - success: true
+        - isSuccess: true
           errCode: '00000003'
           errMessage: 处理中
           status: PENDING
@@ -1796,7 +1794,7 @@ components:
                 - transAmt
       x-examples:
         Example 1:
-          success: true
+          isSuccess: true
           errCode: '00000003'
           errMessage: 处理中
           status: PENDING
@@ -1847,7 +1845,7 @@ components:
         - traceId
       x-examples:
         Example 1:
-          success: true
+          isSuccess: true
           errCode: '00000003'
           errMessage: 处理中
           status: PENDING
@@ -3871,6 +3869,16 @@ components:
           description: 交易类型
           examples:
             - AUTHORIZATION
+        status:
+          type: string
+          enum:
+            - APPROVED
+            - CLEARED
+            - EXPIRED
+            - FAILED
+            - PENDING
+            - REVERSED
+          description: 交易状态。
         transactionId:
           type: string
           description: uuid
